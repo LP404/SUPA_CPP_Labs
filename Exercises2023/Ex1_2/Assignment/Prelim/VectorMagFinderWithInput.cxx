@@ -4,13 +4,6 @@
 #include <vector>
 #include <cmath>
 
-//Function for squaring a float
-int squareNum(float valIn); //prototype
-
-int squareNum(float valIn){ //def
-    return (valIn*valIn);
-}
-
 int main(){
 
     //Declare variables
@@ -25,10 +18,10 @@ int main(){
     std::cin >> y;
     
     //Do the monster math according to some vector properties
-    float mag = sqrt((squareNum(x) + squareNum(y)));
+    float mag = sqrt((pow(x,2) + pow(y,2)));
 
     //Print
-    std::cout << mag << std::endl;
+    std::cout << "The vector length is " << mag << std::endl;
     return 0;
 
 }
