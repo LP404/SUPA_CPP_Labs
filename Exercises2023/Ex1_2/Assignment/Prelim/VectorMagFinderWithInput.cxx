@@ -14,9 +14,16 @@ int squareNum(float valIn){ //def
 int main(){
 
     //Declare variables
-    float x = 2.3;
-    float y = 4.5;
 
+    float x;
+    std::cout << "Please specify x value" << std::endl;
+    std::cin >> x;
+
+
+    float y;
+    std::cout << "Please specify y value" << std::endl;
+    std::cin >> y;
+    
     //Do the monster math according to some vector properties
     float mag = sqrt((squareNum(x) * squareNum(y)));
 
