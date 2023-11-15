@@ -18,7 +18,7 @@ int main(){
     float y = 4.5;
 
     //Do the monster math according to some vector properties
-    float mag = sqrt((squareNum(x) * squareNum(y)));
+    float mag = sqrt((squareNum(x) + squareNum(y)));
 
     //Print
     std::cout << mag << std::endl;
