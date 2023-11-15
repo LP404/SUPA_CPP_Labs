@@ -1,0 +1,11 @@
+Prelim
+Q1 Done
+Q2 Done
+Q3 In progress
+
+Main
+Q1 TODO
+Q2 TODO
+Q3 TODO
+Q4 TODO
+Q5 TODO
