@@ -6,14 +6,20 @@
 #include <string>
 #include <vector>
 
-/// Function will read a two colum txt file, it will also discard the first line
-float ReafFunc(str fileName){
 
-std::ifstream myInput(fileName);
+// Function cannot output more than one variable
+
+std::vector<float> ReadFunc(std::string fName);
+
+/// Function will read a two colum txt file, it will also discard the first line
+std::vector<float> ReadFunc(std::string fName){
+
+std::ifstream myInput(fName);
 
 if(!myInput.is_open()){
     std::cout<<"File is not open"<<std::endl;
-    return 0;
+    std::vector<float> null;
+    return null;
 }
 
 float xHold,yHold;
@@ -35,57 +41,73 @@ while(getline(myInput,line)){
     y.push_back(std::stof(strHold));
 }
 
-
-    return x,y;
+myInput.close();
+return x;y;
 }
 
+int printFunc(std::vector<float> x, std::vector<float> y, int n);
 
-str printFunc(float x, float y, int n){
+int printFunc(std::vector<float> x, std::vector<float> y, int n){
+
 
 ///We can safely assume in this case that each x will have a corresponding y value
 ///If not then I have to do better input checking
 
 if (n > x.size() and n < 5){
     std::cout<<"Warning! Number of values selected is greater than number of values avaliable"<<std::endl;
-    std::cout<<"Printing all avliable lines"<<std::endl;
+    std::cout<<"Printing all avaliable lines"<<std::endl;
 
     for (int i = 0; i < n; i++){
 
-        std::cout<<"Printing all avliable lines"<< x.[0] <<std::endl;
-        std::cout<<"Printing all avliable lines"<<std::endl;
+        std::cout << "Coordiante pair: "<< i+1 << "(" << x[i] << y[i] << ")"<<std::endl;
+
 
     }
 
 }
 
-else if(n > x.size() and n >= 5){
+else if(n > x.size() and n <= 5){
     std::cout<<"Warning! Number of values selected is greater than number of values avaliable"<<std::endl;
-    std::cout<<"Printing first five lines."<<std::endl;
+    std::cout<<"Printing first five coordiante pairs."<<std::endl;
 
+    for (int i = 0; i < 5; i++){
+        std::cout << "Coordiante pair: "<< i+1 << "(" << x[i] << y[i] << ")"<<std::endl;
 
-
+    }
 
 }
 
 else{
+    std::cout<<"Printing " << n << " coordiante pairs."<<std::endl;
+    for (int i = 0; i < 5; i++){
+        std::cout << "Coordiante pair: "<< i+1 << "(" << x[i] << y[i] << ")"<<std::endl;
+
+    }
 
 
 
 
 }
-    std::cout<<xHold<<" "<<yHold<<std::endl;
+return 0;
 }
 
 
 int main(){
 
-"input2D_float.txt"
+std::vector<float> x;
+std::vector<float> y;
+
+x;y = ReadFunc("input2D_float.txt");
+
+std::cout << x,y << std::endl;
+
+///printFunc(x,y, 7);
 
 
-
-}
-
-myInput.close();
 
 return 0;
 }
+
+
+
+
