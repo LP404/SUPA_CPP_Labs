@@ -160,6 +160,8 @@ for(int i = 0; i < n; i++){
     chiSq += pow((yFit[i]-y[i]),2) / (pow(yErr[i],2));
 }
 
+chiSq = chiSq/(N-2.0);
+
 return std::tuple<float, float, float>{m, c, chiSq};
 }
 
