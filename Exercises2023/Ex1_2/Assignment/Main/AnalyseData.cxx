@@ -56,6 +56,8 @@ int n;
 
 n = x.size();
 
+///Using pow because x*x was behaving weird and this was just the simpler optio
+
 for (int i = 0; i < n; i++){
      mag.push_back(sqrt((pow(x[i],2) + pow(y[i],2))));
 }
@@ -120,21 +122,31 @@ return 0;
 
 
 
-std::pair<std::vector<float>, std::vector<float>>  LsqFit(std::vector<float> x, std::vector<float> y);
+std::pair<float, float>  LsqFit(std::vector<float> x, std::vector<float> y);
 
-std::pair<std::vector<float>, std::vector<float>>  LsqFit(std::vector<float> x, std::vector<float> y){
+std::pair<float, float>  LsqFit(std::vector<float> x, std::vector<float> y){
 
 float m,c;
-int n;
+int n = x.size();
+float N = static_cast<float>(x.size());
 
-float sumX;
-float sumY;
-float sumXY;
-float sumXsq;
+float sumX = 0.0;
+float sumY = 0.0;
+float sumXY = 0.0;
+float sumXsq = 0.0;
 
-n = x.size()
+///We can assume that for each x there will be a y, so we can do all the calcualtions in one loop
+for(int i = 0; i < n; i++){
+     sumX += x[i];
+     sumY += y[i];
+     sumXY += (x[i] * y[i]);
+     sumXsq += pow(x[i],2);
+}
 
+m = ((N*sumXY) - (sumX*sumY)) / ((N*sumXsq) - (pow(sumX,2)));
+c = ((sumXsq*sumXY) - (sumXY*sumY)) / ((N*sumXsq) - (pow(sumX,2)));
 
+return {m,c};
 }
 
 
@@ -145,6 +157,8 @@ int main(){
 
 std::vector<float> x;
 std::vector<float> y;
+float m;
+float c;
 std::vector<float> mag;
 ///I'm not exactly sure what auto does, but it works and I'm not ready to question it yet - 22/11/23
 
@@ -153,17 +167,17 @@ auto ret = ReadFunc("input2D_float.txt");
     y = ret.second;
 
 mag = magCal(x,y);
+auto rawrXD = LsqFit(x,y);
+    m = rawrXD.first;
+    c = rawrXD.second;
 
 /// Printing some functions - 22/11/23
 
-
-printFunc(x,y,mag,7);
-
+///printFunc(x,y,mag,7);
 
 
 return 0;
 }
-
 
 
 
