@@ -5,12 +5,14 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <cmath>
 
-// Function cannot output more than one variable
+/// Function cannot output more than one variable - 21/11/23
+///IT CAN NOW!!! HAHAHAHA - 22/11/23
 
 std::pair<std::vector<float>, std::vector<float>> ReadFunc(std::string fName);
 
-/// Function will read a two colum txt file, it will also discard the first line
+/// Function will read a two colum txt file, it will also discard the first line - 21/11/23
 std::pair<std::vector<float>, std::vector<float>> ReadFunc(std::string fName){
 
 std::ifstream myInput(fName);
@@ -43,13 +45,38 @@ myInput.close();
 return {x,y};
 }
 
-int printFunc(std::vector<float> x, std::vector<float> y, int n);
 
-int printFunc(std::vector<float> x, std::vector<float> y, int n){
+std::vector<float> magCal(std::vector<float> x, std::vector<float> y);
+
+std::vector<float> magCal(std::vector<float> x, std::vector<float> y){
+
+std::vector<float> mag;
+
+int n;
+
+n = x.size();
+
+for (int i = 0; i < n; i++){
+     mag.push_back(sqrt((pow(x[i],2) + pow(y[i],2))));
+}
+
+return mag;
+}
 
 
-///We can safely assume in this case that each x will have a corresponding y value
-///If not then I have to do better input checking
+
+
+
+
+
+
+int printFunc(std::vector<float> x, std::vector<float> y, std::vector<float> mag,int n);
+
+int printFunc(std::vector<float> x, std::vector<float> y, std::vector<float> mag, int n){
+
+
+///We can safely assume in this case that each x will have a corresponding y value - 15/11/23?
+///If not then I have to do better input checking - 15/11/23?
 
 if (n > x.size() and n < 5){
     std::cout<<"Warning! Number of values selected is greater than number of values avaliable"<<std::endl;
@@ -57,7 +84,7 @@ if (n > x.size() and n < 5){
 
     for (int i = 0; i < n; i++){
 
-        std::cout << "Coordiante pair: "<< i+1 << " (" << x[i] << "," << y[i] << ")"<<std::endl;
+        std::cout << "Coordiante pair: "<< i+1 << " (" << x[i] << "," << y[i] << ") with magnitude"<< mag[i] <<std::endl;
 
 
     }
@@ -69,7 +96,7 @@ else if(n > x.size() and n <= 5){
     std::cout<<"Printing first five coordiante pairs."<<std::endl;
 
     for (int i = 0; i < 5; i++){
-        std::cout << "Coordiante pair: "<< i+1 << " (" << x[i] << "," << y[i] << ")"<<std::endl;
+        std::cout << "Coordiante pair: "<< i+1 << " (" << x[i] << "," << y[i] << ") with magnitude"<< mag[i] <<std::endl;
 
     }
 
@@ -78,7 +105,7 @@ else if(n > x.size() and n <= 5){
 else{
     std::cout<<"Printing " << n << " coordiante pairs."<<std::endl;
     for (int i = 0; i < n; i++){
-        std::cout << "Coordiante pair: "<< i+1 << " (" << x[i] << "," << y[i] << ")"<<std::endl;
+        std::cout << "Coordiante pair: "<< i+1 << " (" << x[i] << "," << y[i] << ") with magnitude : "<< mag[i] <<std::endl;
 
     }
 
@@ -90,23 +117,47 @@ return 0;
 }
 
 
+
+
+
+std::pair<std::vector<float>, std::vector<float>>  LsqFit(std::vector<float> x, std::vector<float> y);
+
+std::pair<std::vector<float>, std::vector<float>>  LsqFit(std::vector<float> x, std::vector<float> y){
+
+float m,c;
+int n;
+
+float sumX;
+float sumY;
+float sumXY;
+float sumXsq;
+
+n = x.size()
+
+
+}
+
+
+
 int main(){
 
-///Declate me some vectors
+///Declate me some vectors - 22/11/23
 
 std::vector<float> x;
 std::vector<float> y;
-
-///I'm not exactly sure what auto does, but it works and I'm not ready to question it yet
+std::vector<float> mag;
+///I'm not exactly sure what auto does, but it works and I'm not ready to question it yet - 22/11/23
 
 auto ret = ReadFunc("input2D_float.txt");
     x = ret.first;
     y = ret.second;
 
-/// Printing some functions
+mag = magCal(x,y);
+
+/// Printing some functions - 22/11/23
 
 
-printFunc(x,y, 7);
+printFunc(x,y,mag,7);
 
 
 
