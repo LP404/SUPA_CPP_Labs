@@ -6,20 +6,18 @@
 #include <string>
 #include <vector>
 
-
 // Function cannot output more than one variable
 
-std::vector<float> ReadFunc(std::string fName);
+std::pair<std::vector<float>, std::vector<float>> ReadFunc(std::string fName);
 
 /// Function will read a two colum txt file, it will also discard the first line
-std::vector<float> ReadFunc(std::string fName){
+std::pair<std::vector<float>, std::vector<float>> ReadFunc(std::string fName){
 
 std::ifstream myInput(fName);
 
 if(!myInput.is_open()){
     std::cout<<"File is not open"<<std::endl;
-    std::vector<float> null;
-    return null;
+    exit(1);
 }
 
 float xHold,yHold;
@@ -42,7 +40,7 @@ while(getline(myInput,line)){
 }
 
 myInput.close();
-return x;y;
+return {x,y};
 }
 
 int printFunc(std::vector<float> x, std::vector<float> y, int n);
@@ -59,7 +57,7 @@ if (n > x.size() and n < 5){
 
     for (int i = 0; i < n; i++){
 
-        std::cout << "Coordiante pair: "<< i+1 << "(" << x[i] << y[i] << ")"<<std::endl;
+        std::cout << "Coordiante pair: "<< i+1 << " (" << x[i] << "," << y[i] << ")"<<std::endl;
 
 
     }
@@ -71,7 +69,7 @@ else if(n > x.size() and n <= 5){
     std::cout<<"Printing first five coordiante pairs."<<std::endl;
 
     for (int i = 0; i < 5; i++){
-        std::cout << "Coordiante pair: "<< i+1 << "(" << x[i] << y[i] << ")"<<std::endl;
+        std::cout << "Coordiante pair: "<< i+1 << " (" << x[i] << "," << y[i] << ")"<<std::endl;
 
     }
 
@@ -79,8 +77,8 @@ else if(n > x.size() and n <= 5){
 
 else{
     std::cout<<"Printing " << n << " coordiante pairs."<<std::endl;
-    for (int i = 0; i < 5; i++){
-        std::cout << "Coordiante pair: "<< i+1 << "(" << x[i] << y[i] << ")"<<std::endl;
+    for (int i = 0; i < n; i++){
+        std::cout << "Coordiante pair: "<< i+1 << " (" << x[i] << "," << y[i] << ")"<<std::endl;
 
     }
 
@@ -94,14 +92,21 @@ return 0;
 
 int main(){
 
+///Declate me some vectors
+
 std::vector<float> x;
 std::vector<float> y;
 
-x;y = ReadFunc("input2D_float.txt");
+///I'm not exactly sure what auto does, but it works and I'm not ready to question it yet
 
-std::cout << x,y << std::endl;
+auto ret = ReadFunc("input2D_float.txt");
+    x = ret.first;
+    y = ret.second;
 
-///printFunc(x,y, 7);
+/// Printing some functions
+
+
+printFunc(x,y, 7);
 
 
 
