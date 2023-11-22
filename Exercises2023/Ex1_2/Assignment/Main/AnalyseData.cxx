@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include <tuple>
 
 /// Function cannot output more than one variable - 21/11/23
 ///IT CAN NOW!!! HAHAHAHA - 22/11/23
@@ -122,9 +123,9 @@ return 0;
 
 
 
-std::pair<float, float>  LsqFit(std::vector<float> x, std::vector<float> y);
+std::tuple<float, float, float>  LsqFit(std::vector<float> x, std::vector<float> y, std::vector<float> xErr, std::vector<float> yErr);
 
-std::pair<float, float>  LsqFit(std::vector<float> x, std::vector<float> y){
+std::tuple<float, float, float>  LsqFit(std::vector<float> x, std::vector<float> y, std::vector<float> xErr, std::vector<float> yErr){
 
 float m,c;
 int n = x.size();
@@ -134,6 +135,9 @@ float sumX = 0.0;
 float sumY = 0.0;
 float sumXY = 0.0;
 float sumXsq = 0.0;
+std::vector<float> yFit;
+float chiSq = 0.0;
+
 
 ///We can assume that for each x there will be a y, so we can do all the calcualtions in one loop
 for(int i = 0; i < n; i++){
@@ -146,7 +150,17 @@ for(int i = 0; i < n; i++){
 m = ((N*sumXY) - (sumX*sumY)) / ((N*sumXsq) - (pow(sumX,2)));
 c = ((sumXsq*sumXY) - (sumXY*sumY)) / ((N*sumXsq) - (pow(sumX,2)));
 
-return {m,c};
+for(int i = 0; i < n; i++){
+    yFit.push_back(((m*x[i]) + c));
+}
+
+
+///kind of assuming that the inputs and error have the same dimentions
+for(int i = 0; i < n; i++){
+    chiSq += pow((yFit[i]-y[i]),2) / (pow(yErr[i],2));
+}
+
+return std::tuple<float, float, float>{m, c, chiSq};
 }
 
 
@@ -157,8 +171,14 @@ int main(){
 
 std::vector<float> x;
 std::vector<float> y;
+
+std::vector<float> xErr;
+std::vector<float> yErr;
+
+
 float m;
 float c;
+float chiSq;
 std::vector<float> mag;
 ///I'm not exactly sure what auto does, but it works and I'm not ready to question it yet - 22/11/23
 
@@ -166,10 +186,18 @@ auto ret = ReadFunc("input2D_float.txt");
     x = ret.first;
     y = ret.second;
 
+auto ret2 = ReadFunc("error2D_float.txt");
+    xErr = ret2.first;
+    yErr = ret2.second;
+
 mag = magCal(x,y);
-auto rawrXD = LsqFit(x,y);
-    m = rawrXD.first;
-    c = rawrXD.second;
+
+auto rawrXD = LsqFit(x,y,xErr,yErr);
+    m = std::get<0>(rawrXD);
+    c = std::get<1>(rawrXD);
+    chiSq = std::get<2>(rawrXD);
+
+std::cout << m << "\n" << c << "\n" << chiSq;
 
 /// Printing some functions - 22/11/23
 
