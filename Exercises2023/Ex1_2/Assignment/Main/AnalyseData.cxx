@@ -147,6 +147,7 @@ for(int i = 0; i < n; i++){
      sumXsq += pow(x[i],2);
 }
 
+
 m = ((N*sumXY) - (sumX*sumY)) / ((N*sumXsq) - (pow(sumX,2)));
 c = ((sumXsq*sumXY) - (sumXY*sumY)) / ((N*sumXsq) - (pow(sumX,2)));
 
