@@ -149,7 +149,7 @@ for(int i = 0; i < n; i++){
 
 
 m = ((N*sumXY) - (sumX*sumY)) / ((N*sumXsq) - (pow(sumX,2)));
-c = ((sumXsq*sumXY) - (sumXY*sumY)) / ((N*sumXsq) - (pow(sumX,2)));
+c = ((sumXsq*sumY) - (sumXY*sumY)) / ((N*sumXsq) - (pow(sumX,2)));
 
 for(int i = 0; i < n; i++){
     yFit.push_back(((m*x[i]) + c));
