@@ -47,25 +47,28 @@ myInput.close();
 return {x,y};
 }
 
+int WriteFunc(std::string fName,std::vector<float> x, std::vector<float> y, std::vector<float> result);
 
-std::vector<float> magCal(std::vector<float> x, std::vector<float> y);
 
-std::vector<float> magCal(std::vector<float> x, std::vector<float> y){
-
-std::vector<float> mag;
-
-int n;
-
-n = x.size();
-
-///Using pow because x*x was behaving weird and this was just the simpler optio
-
-for (int i = 0; i < n; i++){
-     mag.push_back(sqrt((pow(x[i],2) + pow(y[i],2))));
+int WriteFunc(std::string fName,std::vector<float> x, std::vector<float> y, std::vector<float> result){
 }
 
-return mag;
+
+
+
+int WriteFunc(std::string fName,float m, float c, float chiSq);
+
+
+int WriteFunc(std::string fName,float m, float c, float chiSq){
 }
+
+
+
+
+
+
+
+
 
 
 int printFunc(std::vector<float> x, std::vector<float> y, std::vector<float> mag,int n);
@@ -108,8 +111,6 @@ else{
     }
 
 
-
-
 }
 return 0;
 }
@@ -137,6 +138,25 @@ int printFunc(float m,float c,float chiSq){
     std::cout<< "This fit has a Chi Squared / NDF value of : " << chiSq << "\n" << std::endl;
 
 return 0;
+}
+
+std::vector<float> magCal(std::vector<float> x, std::vector<float> y);
+
+std::vector<float> magCal(std::vector<float> x, std::vector<float> y){
+
+std::vector<float> mag;
+
+int n;
+
+n = x.size();
+
+///Using pow because x*x was behaving weird and this was just the simpler optio
+
+for (int i = 0; i < n; i++){
+     mag.push_back(sqrt((pow(x[i],2) + pow(y[i],2))));
+}
+
+return mag;
 }
 
 std::tuple<float, float, float>  LsqFit(std::vector<float> x, std::vector<float> y, std::vector<float> xErr, std::vector<float> yErr);
@@ -182,8 +202,6 @@ chiSq = chiSq/(N-2.0);
 return std::tuple<float, float, float>{m, c, chiSq};
 }
 
-
-
 ///Custom power function that does not use a loop or an inbuilt/imported power function
 ///Honestly looking at this makes me sick
 
@@ -192,7 +210,7 @@ std::vector<float>  OwnPowFunc(std::vector<float> x, std::vector<float> y,std::v
 std::vector<float>  OwnPowFunc(std::vector<float> x, std::vector<float> y,std::vector<float> out,int count){
 
 
-if(count <= x.size()){
+if(count < x.size()){
     out.push_back(exp(y[count] * log(x[count])));   
     return OwnPowFunc(x,  y, out, count+1);  
 }
@@ -241,18 +259,15 @@ auto rawrXD = LsqFit(x,y,xErr,yErr);
     c = std::get<1>(rawrXD);
     chiSq = std::get<2>(rawrXD);
     
-std::cout << m << "\n" << c << "\n" << chiSq << std::endl;
-
 std::vector<float> out;
 
 powXY = OwnPowFunc(x,y,out,0);
 
-std::cout << "What?" << powXY[0] << "\n" << std::endl;
-
 
 /// Printing some functions - 22/11/23
 
-///printFunc(x,y,mag,7);
+
+
 
 
 return 0;
