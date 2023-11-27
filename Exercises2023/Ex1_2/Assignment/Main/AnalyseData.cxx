@@ -168,6 +168,26 @@ return std::tuple<float, float, float>{m, c, chiSq};
 
 
 
+///Custom power function that does not use a for loop or an inbuilt/imported power function
+
+std::vector<float>  OwnPowFunc(std::vector<float> x, std::vector<float> y);
+
+std::vector<float>  OwnPowFunc(std::vector<float> x, std::vector<float> y){
+
+int n = x.size();
+int count = 0;
+std::vector<float> xyPow;
+
+    while(count <= n){
+        xyPow.push_back(exp(y[count] * log(x[count)));        
+        count++;
+    }
+
+return xyPow;    
+}
+
+
+
 int main(){
 
 ///Declate me some vectors - 22/11/23
