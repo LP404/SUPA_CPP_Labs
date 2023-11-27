@@ -77,12 +77,12 @@ int printFunc(std::vector<float> x, std::vector<float> y, std::vector<float> mag
 ///If not then I have to do better input checking - 15/11/23?
 
 if (n > x.size() and n < 5){
-    std::cout<<"Warning! Number of values selected is greater than number of values avaliable"<<std::endl;
-    std::cout<<"Printing all avaliable lines"<<std::endl;
+    std::cout<<"Warning! Number of values selected is greater than number of values avaliable"<< "\n" << std::endl;
+    std::cout<<"Printing all avaliable lines"<< "\n" <<std::endl;
 
     for (int i = 0; i < n; i++){
 
-        std::cout << "Coordiante pair: "<< i+1 << " (" << x[i] << "," << y[i] << ") with magnitude"<< mag[i] <<std::endl;
+        std::cout << "Coordiante pair: "<< i+1 << " (" << x[i] << "," << y[i] << ") with magnitude"<< mag[i] << "\n" <<std::endl;
 
 
     }
@@ -90,20 +90,20 @@ if (n > x.size() and n < 5){
 }
 
 else if(n > x.size() and n <= 5){
-    std::cout<<"Warning! Number of values selected is greater than number of values avaliable"<<std::endl;
-    std::cout<<"Printing first five coordiante pairs."<<std::endl;
+    std::cout<<"Warning! Number of values selected is greater than number of values avaliable"<< "\n" <<std::endl;
+    std::cout<<"Printing first five coordiante pairs."<< "\n" <<std::endl;
 
     for (int i = 0; i < 5; i++){
-        std::cout << "Coordiante pair: "<< i+1 << " (" << x[i] << "," << y[i] << ") with magnitude"<< mag[i] <<std::endl;
+        std::cout << "Coordiante pair: "<< i+1 << " (" << x[i] << "," << y[i] << ") with magnitude"<< mag[i] << "\n" <<std::endl;
 
     }
 
 }
 
 else{
-    std::cout<<"Printing " << n << " coordiante pairs."<<std::endl;
+    std::cout<<"Printing " << n << " coordiante pairs."<< "\n" << std::endl;
     for (int i = 0; i < n; i++){
-        std::cout << "Coordiante pair: "<< i+1 << " (" << x[i] << "," << y[i] << ") with magnitude : "<< mag[i] <<std::endl;
+        std::cout << "Coordiante pair: "<< i+1 << " (" << x[i] << "," << y[i] << ") with magnitude : "<< mag[i] << "\n" <<std::endl;
 
     }
 
@@ -114,9 +114,30 @@ else{
 return 0;
 }
 
+int printFunc(std::vector<float> x,std::vector<float> y,std::vector<float> xyPow);
+
+int printFunc(std::vector<float> x,std::vector<float> y,std::vector<float> xyPow){
+
+    int n = xyPow.size();
+
+    for (int i = 0; i < n; i++){
+        std::cout << "The result of: "<< x[i] << " to the power of " << y[i] << " is: "<< xyPow[i] << "\n" <<std::endl;
+    }
 
 
+return 0;
+}
 
+int printFunc(float m,float c,float chiSq);
+
+int printFunc(float m,float c,float chiSq){
+
+    std::cout<< "The gradient is : " << m << "\n" << std::endl;
+    std::cout<< "The y-intercept is : " << c << "\n" << std::endl;
+    std::cout<< "This fit has a Chi Squared / NDF value of : " << chiSq << "\n" << std::endl;
+
+return 0;
+}
 
 std::tuple<float, float, float>  LsqFit(std::vector<float> x, std::vector<float> y, std::vector<float> xErr, std::vector<float> yErr);
 
@@ -163,22 +184,23 @@ return std::tuple<float, float, float>{m, c, chiSq};
 
 
 
-///Custom power function that does not use a for loop or an inbuilt/imported power function
+///Custom power function that does not use a loop or an inbuilt/imported power function
+///Honestly looking at this makes me sick
 
-std::vector<float>  OwnPowFunc(std::vector<float> x, std::vector<float> y);
+std::vector<float>  OwnPowFunc(std::vector<float> x, std::vector<float> y,std::vector<float> out,int count);
 
-std::vector<float>  OwnPowFunc(std::vector<float> x, std::vector<float> y){
+std::vector<float>  OwnPowFunc(std::vector<float> x, std::vector<float> y,std::vector<float> out,int count){
 
-int n = x.size();
-int count = 0;
-std::vector<float> xyPow;
 
-    while(count <= n){
-        xyPow.push_back(exp(y[count] * log(x[count])));        
-        count++;
-    }
+if(count <= x.size()){
+    out.push_back(exp(y[count] * log(x[count])));   
+    return OwnPowFunc(x,  y, out, count+1);  
+}
 
-return xyPow;    
+else{
+    return out;
+}
+
 }
 
 
@@ -219,9 +241,13 @@ auto rawrXD = LsqFit(x,y,xErr,yErr);
     c = std::get<1>(rawrXD);
     chiSq = std::get<2>(rawrXD);
     
-std::cout << m << "\n" << c << "\n" << chiSq;
+std::cout << m << "\n" << c << "\n" << chiSq << std::endl;
 
-powXY = OwnPowFunc(x,y);
+std::vector<float> out;
+
+powXY = OwnPowFunc(x,y,out,0);
+
+std::cout << "What?" << powXY[0] << "\n" << std::endl;
 
 
 /// Printing some functions - 22/11/23
@@ -231,6 +257,3 @@ powXY = OwnPowFunc(x,y);
 
 return 0;
 }
-
-
-
