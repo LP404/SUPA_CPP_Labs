@@ -47,10 +47,32 @@ myInput.close();
 return {x,y};
 }
 
-int WriteFunc(std::string fName,std::vector<float> x, std::vector<float> y, std::vector<float> result);
+int WriteFunc(std::string fName,std::vector<float> x, std::vector<float> y, std::vector<float> result,bool isMag);
 
 
-int WriteFunc(std::string fName,std::vector<float> x, std::vector<float> y, std::vector<float> result){
+int WriteFunc(std::string fName,std::vector<float> x, std::vector<float> y, std::vector<float> result,bool isMag){
+
+std::ofstream myOutput (fName+".txt");
+  
+if(!myOutput.is_open()){
+    std::cout<<"File could not opened"<<std::endl;
+    exit(1);
+}
+
+if(isMag == true){
+    myOutput << "x,y,mag" << "\n";
+}
+else{
+    myOutput << "x,y,powerXtoY"<< "\n";
+}
+
+for (int i = 0; i < x.size(); i++){
+    myOutput << x[i] << "," << y[i] << "," << result[i]<<"\n";
+  }
+myOutput.close();
+return 0;
+
+
 }
 
 
@@ -60,7 +82,23 @@ int WriteFunc(std::string fName,float m, float c, float chiSq);
 
 
 int WriteFunc(std::string fName,float m, float c, float chiSq){
+
+std::ofstream myOutput (fName+".txt");
+  
+if(!myOutput.is_open()){
+    std::cout<<"File could not opened"<<std::endl;
+    exit(1);
 }
+
+///Note m is p; and q is c
+myOutput << "m,c,chiSq"<< "\n";
+myOutput << m<< ","<< c << "," << chiSq<< "\n";
+myOutput.close();
+return 0;
+
+
+}
+
 
 
 
@@ -267,8 +305,9 @@ powXY = OwnPowFunc(x,y,out,0);
 /// Printing some functions - 22/11/23
 
 
-
-
+WriteFunc("MagFiles",x, y, mag, true);
+WriteFunc("powerXtoY",x, y, powXY, false);
+WriteFunc("lineFiles",m, c, chiSq);
 
 return 0;
 }
