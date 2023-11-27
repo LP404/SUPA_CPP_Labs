@@ -174,7 +174,7 @@ int count = 0;
 std::vector<float> xyPow;
 
     while(count <= n){
-        xyPow.push_back(exp(y[count] * log(x[count)));        
+        xyPow.push_back(exp(y[count] * log(x[count])));        
         count++;
     }
 
@@ -182,105 +182,7 @@ return xyPow;
 }
 
 
-int printFunc2(const char* fmt...);
-void printFunc2(const char* fmt...)
-{
-    va_list args;
-    va_start(args, fmt);
- 
-    while (*fmt != '\0')
-    {
-        if (*fmt == 'v')
-        {
-            std::vector<float> vec = va_arg(args, std::vector<float>);
-            
-        }
-        else if (*fmt == 'x')
-        {
-            // note automatic conversion to integral type
-            std::vector<float> xVal = va_arg(args, std::vector<float>);
-            int xAssign = 1;
-        }
-        else if (*fmt == 'y')
-        {
-            // note automatic conversion to integral type
-            std::vector<float> yVal = va_arg(args, std::vector<float>);
-            int yAssign = 1;
-        }
-        else if (*fmt == 'xErr')
-        {
-            // note automatic conversion to integral type
-            std::vector<float> xValErr = va_arg(args, std::vector<float>);
-            int xErrAssign = 1;
-        }
-        else if (*fmt == 'yErr')
-        {
-            // note automatic conversion to integral type
-            std::vector<float> yValErr = va_arg(args, std::vector<float>);
-            int yErrAssign = 1;
-        }              
-        else if (*fmt == 'f')
-        {
-            // note automatic conversion to integral type
-            float boat = va_arg(args, float);
-            std::cout << boat;
-        }
-        else if (*fmt == 's')
-        {
-            // note automatic conversion to integral type
-            string strimples = va_arg(args, string);
-        }
-        else if (*fmt == 'nlin')
-        {
-            // note automatic conversion to integral type
-            std::cout << "\n";
-        }
-        ++fmt;
 
-    }
-    
-    if (xErrAssign == 1 and yErrAssign == 1){
-        
-        
-    }
-    
- 
-    va_end(args);
-
-}
- 
-
-
-void printFunc2(const char* fmt...);
-void printFunc2(const char* fmt...)
-{
-    va_list args;
-    va_start(args, fmt);
- 
-    while (*fmt != '\0')
-    {
-        if (*fmt == 'd')
-        {
-            int i = va_arg(args, int);
-            std::cout << i << '\n';
-        }
-        else if (*fmt == 'c')
-        {
-            // note automatic conversion to integral type
-            int c = va_arg(args, int);
-            std::cout << static_cast<char>(c) << '\n';
-        }
-        else if (*fmt == 'f')
-        {
-            double d = va_arg(args, double);
-            std::cout << d << '\n';
-        }
-        ++fmt;
-    }
- 
-    va_end(args);
-
-}
 
 
 
