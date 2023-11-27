@@ -274,21 +274,30 @@ std::vector<float> y;
 std::vector<float> xErr;
 std::vector<float> yErr;
 
+///I'm not exactly sure what auto does, but it works and I'm not ready to question it yet - 22/11/23
+///Not exactly the mindset a scientist should have - 27/11/23
+auto ret = ReadFunc("input2D_float.txt");
+    x = ret.first;
+    y = ret.second;
+auto ret2 = ReadFunc("error2D_float.txt");
+    xErr = ret2.first;
+    yErr = ret2.second;
+
+
+int userInput;
+std::cout << "What function would you like to run?" << "\n" <<std::endl;
+std::cout << "Find vector magnitude (0)" << "\n" <<std::endl;
+std::cout << "Find line of best fit via least square fitting (1)" << "\n" <<std::endl;
+std::cout << "Find the result of x^y (2)" << "\n" <<std::endl;
+std::cin >> userInput;
+
+
 
 float m;
 float c;
 float chiSq;
 std::vector<float> mag;
 std::vector<float> powXY;
-///I'm not exactly sure what auto does, but it works and I'm not ready to question it yet - 22/11/23
-
-auto ret = ReadFunc("input2D_float.txt");
-    x = ret.first;
-    y = ret.second;
-
-auto ret2 = ReadFunc("error2D_float.txt");
-    xErr = ret2.first;
-    yErr = ret2.second;
 
 mag = magCal(x,y);
 
