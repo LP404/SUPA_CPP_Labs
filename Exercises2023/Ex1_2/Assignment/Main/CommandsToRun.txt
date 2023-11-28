@@ -1,0 +1,3 @@
+cd Exercises2023/Ex1_2/Assignment/Main
+g++ -w  AnalyseData.cxx CustomFunctions.cxx
+./a.out

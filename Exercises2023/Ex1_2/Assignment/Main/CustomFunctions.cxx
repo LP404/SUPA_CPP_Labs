@@ -160,7 +160,7 @@ int n;
 
 n = x.size();
 
-///Using pow because x*x was behaving weird and this was just the simpler optio
+///Using pow because x*x was behaving weird and this was just the simpler option
 
 for (int i = 0; i < n; i++){
      mag.push_back(sqrt((pow(x[i],2) + pow(y[i],2))));
@@ -244,5 +244,4 @@ int UserInputFunc(int userInput){
     else{
     return userInput;
     }
-return 0;
 }
