@@ -47,10 +47,10 @@ myInput.close();
 return {x,y};
 }
 
-int WriteFunc(std::string fName,std::vector<float> x, std::vector<float> y, std::vector<float> result,bool isMag);
+int WriteFunc(std::string fName,std::vector<float> x, std::vector<float> y, std::vector<float> result, int n, bool isMag);
 
 
-int WriteFunc(std::string fName,std::vector<float> x, std::vector<float> y, std::vector<float> result,bool isMag){
+int WriteFunc(std::string fName,std::vector<float> x, std::vector<float> y, std::vector<float> result , int n ,bool isMag){
 
 std::ofstream myOutput (fName+".txt");
   
@@ -66,7 +66,7 @@ else{
     myOutput << "x,y,powerXtoY"<< "\n";
 }
 
-for (int i = 0; i < x.size(); i++){
+for (int i = 0; i < n; i++){
     myOutput << x[i] << "," << y[i] << "," << result[i]<<"\n";
   }
 myOutput.close();
@@ -258,7 +258,21 @@ else{
 }
 
 
-
+int UserInputFunc(int userInput){
+    std::cout << "What function would you like to run?" << "\n" <<std::endl;
+    std::cout << "Find vector magnitude and; print and save n values(0)" << "\n" <<std::endl;
+    std::cout << "Find line of best fit via least square fitting (1)" << "\n" <<std::endl;
+    std::cout << "Find the result of x^y and; print and save n values(2)" << "\n" <<std::endl;
+    std::cin >> userInput;
+    std::cout << "\n" <<std::endl;
+    if(userInput !=0 and userInput !=1 and userInput !=2){
+        std::cout << "Invalid response, please type 0, 1,or 2" << "\n" <<std::endl;
+        UserInputFunc(userInput);
+    }
+    else{
+    return userInput;
+    }
+}
 
 
 
@@ -283,11 +297,8 @@ auto ret2 = ReadFunc("error2D_float.txt");
 
 
 int userInput;
-std::cout << "What function would you like to run?" << "\n" <<std::endl;
-std::cout << "Find vector magnitude and print n values(0)" << "\n" <<std::endl;
-std::cout << "Find line of best fit via least square fitting (1)" << "\n" <<std::endl;
-std::cout << "Find the result of x^y and print n values(2)" << "\n" <<std::endl;
-std::cin >> userInput;
+userInput = UserInputFunc(userInput);
+
 
 switch (userInput) {
   case 0:
@@ -295,12 +306,12 @@ switch (userInput) {
     std::vector<float> mag;
     int n;
 
-    std::cout << "How many values would you like to display?" << "\n" <<std::endl;
+    std::cout << "How many values would you like to display and save?" << "\n" <<std::endl;
     std::cin >> n;
 
     mag = magCal(x,y);
 
-    WriteFunc("MagFiles",x, y, mag, true);
+    WriteFunc("MagFiles",x, y, mag, n,true);
     printFunc(x,y,mag,n,true);
 
     break;
@@ -329,20 +340,13 @@ switch (userInput) {
     int n;
     std::vector<float> powXY;
     std::vector<float> out;
-    std::cout << "How many values would you like to display?" << "\n" <<std::endl;
+    std::cout << "How many values would you like to display and save?" << "\n" <<std::endl;
     std::cin >> n;
     powXY = OwnPowFunc(x,y,out,0);
-    WriteFunc("powerXtoY",x, y, powXY, false);
+    WriteFunc("powerXtoY",x, y, powXY, n,false);
     printFunc(x,y,powXY,n,false);
 }
 }
-
-/// Printing some functions - 22/11/23
-
-
-
-
-
 
 return 0;
 }
