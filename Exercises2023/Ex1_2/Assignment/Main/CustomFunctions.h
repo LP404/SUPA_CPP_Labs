@@ -1,11 +1,9 @@
-#include <iostream>
-#include <fstream>
-#include <sstream>
 #include <string>
 #include <vector>
-#include <cmath>
 #include <tuple>
-#include <cstdarg>
+
+///.h file
+///Creates protoypes for each of the functions used in the main()
 
 #pragma once
 std::pair<std::vector<float>, std::vector<float>> ReadFunc(std::string fName);
