@@ -31,6 +31,3 @@ std::vector<float>  OwnPowFunc(std::vector<float> x, std::vector<float> y,std::v
 
 #pragma once
 int UserInputFunc(int userInput);
-
-#pragma once
-int ValidIntFunc(int userInput);

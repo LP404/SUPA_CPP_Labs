@@ -315,25 +315,3 @@ int UserInputFunc(int userInput){
     return userInput;
     }
 }
-
-///Input function that will only allow a set number of inputs to run the script.
-///Function uses recursion, it will output an int that will feed into a switch case
-int ValidIntFunc(int userInput){
-    std::cout << "How many values would you like to display and save?" << "\n" <<std::endl;
-    ///Takes in input and then checks if it valid
-    ///If it is invalid it will prompt the user to try again and call itself again.
-    std::cin >> userInput;
-    std::cout << "\n" <<std::endl;
-    if(!std::isdigit(userInput)){
-        std::cout << "Invalid response please enter a positive integer" << "\n" <<std::endl;
-        ValidIntFunc(userInput);
-    }
-    else if (userInput < 0){
-      std::cout << "Invalid response please enter a positive integer" << "\n" <<std::endl;
-      ValidIntFunc(userInput);
-    }
-    else{
-    ///If the user has inputted an allowed value, that value will be returned
-    return userInput;
-    }
-}
