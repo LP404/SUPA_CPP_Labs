@@ -5,7 +5,6 @@
 #include <vector>
 #include <cmath>
 #include <tuple>
-#include <cstdarg>
 
 ///Note: I think I've been extensive with the comments, please tell me if this is too much or too little
 ///Also before we begin, I must say that almost every function coded with the assumption that for each x value, that there is a corresponding y value

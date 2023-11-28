@@ -1,4 +1,5 @@
-// LP 15/11/23
+// Lewis Penman - University of Strathclyde SUPA COO
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -43,7 +44,7 @@ switch (userInput) {
     int n;
 
     ///Prompts user for number of values
-    ///I attemped input validation on this but it kept breaking and I have ran out of time to attempt to fix it
+    ///I attemped input validation on this but it kept breaking depending on what input I was attempting to screen out
     std::cout << "How many values would you like to display and save?" << "\n" <<std::endl;
     std::cin >> n;
 
