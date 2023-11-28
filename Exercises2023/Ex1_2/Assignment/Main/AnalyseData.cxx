@@ -140,10 +140,10 @@ else if(n > x.size() and n <= 5){
 
     for (int i = 0; i < 5; i++){
         if (isMag == true){
-        std::cout << "Coordiante pair: "<< i+1 << " (" << x[i] << "," << y[i] << ") with magnitude: "<< result[i] << "\n" <<std::endl
+        std::cout << "Coordiante pair: "<< i+1 << " (" << x[i] << "," << y[i] << ") with magnitude: "<< result[i] << "\n" <<std::endl;
         }
         else{
-        std::cout << "Coordiante pair: "<< i+1 << " (" << x[i] << "," << y[i] << ") with x^y value of: "<< result[i] << "\n" <<std::endl
+        std::cout << "Coordiante pair: "<< i+1 << " (" << x[i] << "," << y[i] << ") with x^y value of: "<< result[i] << "\n" <<std::endl;
         }
     }
 
@@ -291,18 +291,23 @@ std::cin >> userInput;
 
 switch (userInput) {
   case 0:
+  {
     std::vector<float> mag;
     int n;
+
+    std::cout << "How many values would you like to display?" << "\n" <<std::endl;
+    std::cin >> n;
+
     mag = magCal(x,y);
 
-    printFunc(x,y,mag,int n)
     WriteFunc("MagFiles",x, y, mag, true);
-    printFunc(x,y,powXY,n,true);
+    printFunc(x,y,mag,n,true);
 
     break;
-  
+  }
   
   case 1:
+   {
     float m;
     float c;
     float chiSq;
@@ -317,15 +322,19 @@ switch (userInput) {
 
 
     break;
-  
+   }
   
   case 2:
+    {
     int n;
     std::vector<float> powXY;
     std::vector<float> out;
+    std::cout << "How many values would you like to display?" << "\n" <<std::endl;
+    std::cin >> n;
     powXY = OwnPowFunc(x,y,out,0);
     WriteFunc("powerXtoY",x, y, powXY, false);
     printFunc(x,y,powXY,n,false);
+}
 }
 
 /// Printing some functions - 22/11/23
