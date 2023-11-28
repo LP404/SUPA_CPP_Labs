@@ -4,9 +4,10 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <cmath>
 #include <tuple>
 #include <cstdarg>
-#include " CustomFunctions.h"
+#include "CustomFunctions.h"
 
 int main(){
 
@@ -84,6 +85,5 @@ switch (userInput) {
     return 0;
 }
 }
-
 return 0;
 }

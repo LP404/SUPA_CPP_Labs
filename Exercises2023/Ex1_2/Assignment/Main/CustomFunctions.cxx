@@ -245,3 +245,8 @@ int UserInputFunc(int userInput){
     return userInput;
     }
 }
+
+int main()
+{
+return 0;
+}
