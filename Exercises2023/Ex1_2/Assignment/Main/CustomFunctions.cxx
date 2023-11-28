@@ -244,9 +244,5 @@ int UserInputFunc(int userInput){
     else{
     return userInput;
     }
-}
-
-int main()
-{
 return 0;
 }
