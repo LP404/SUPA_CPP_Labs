@@ -39,8 +39,7 @@ switch (userInput) {
     std::vector<float> mag;
     int n;
 
-    std::cout << "How many values would you like to display and save?" << "\n" <<std::endl;
-    std::cin >> n;
+    n = ValidIntFunc(n);
 
     mag = magCal(x,y);
 
@@ -73,8 +72,7 @@ switch (userInput) {
     int n;
     std::vector<float> powXY;
     std::vector<float> out;
-    std::cout << "How many values would you like to display and save?" << "\n" <<std::endl;
-    std::cin >> n;
+    n = ValidIntFunc(n);
     powXY = OwnPowFunc(x,y,out,0);
     WriteFunc("powerXtoY",x, y, powXY, n,false);
     printFunc(x,y,powXY,n,false);

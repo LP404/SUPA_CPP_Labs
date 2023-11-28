@@ -235,6 +235,7 @@ float chiSq = 0.0;
 
 
 ///We can assume that for each x there will be a y, so we can do all the calcualtions in one loop
+///Creates the sum values to simplify the following calculations that is easier to code and more readable to other users
 for(int i = 0; i < n; i++){
      sumX += x[i];
      sumY += y[i];
@@ -242,50 +243,67 @@ for(int i = 0; i < n; i++){
      sumXsq += pow(x[i],2);
 }
 
-
+///Performs the arithmetic operations described in the assignment pdf
 m = ((N*sumXY) - (sumX*sumY)) / ((N*sumXsq) - (pow(sumX,2)));
 c = ((sumXsq*sumY) - (sumXY*sumY)) / ((N*sumXsq) - (pow(sumX,2)));
 
+///Creates an exected y value using the fit values (and the x values) that we just created
+///As far as I can tell, we don't need to sort the x values to make a more 'logical'? output as we are not acually graphing anything
 for(int i = 0; i < n; i++){
     yFit.push_back(((m*x[i]) + c));
 }
 
 
-///kind of assuming that the inputs and error have the same dimentions
+///This assumes that each x and y value, has a corresponding error in the other .txt file
+///Performs arithmetic operation described in the assignment pdf
 for(int i = 0; i < n; i++){
     chiSq += pow((yFit[i]-y[i]),2) / (pow(yErr[i],2));
 }
 
+///Outputs the chiSq/NDF (which should be number of values minus the number of paramaters)
 chiSq = chiSq/(N-2.0);
 
+///Returns the tuple
 return std::tuple<float, float, float>{m, c, chiSq};
 }
 
 ///Custom power function that does not use a loop or an inbuilt/imported power function
+///Function uses recursion
 ///Honestly looking at this makes me sick
 
-
+///Function will return a vector of floats
+///Function takes x and y values as input. The output vector is also an input, but the input itself will only be the initalised vector
+///Also takes in a int value of 0 to track how many times it has called itself
 std::vector<float>  OwnPowFunc(std::vector<float> x, std::vector<float> y,std::vector<float> out,int count){
 
-
+///Statment checks to see if it has called itself enough time to have completed the operation for each x and y value set
 if(count < x.size()){
+    ///Uses the properties of logarithims to perform a power operation.
+    ///Pushes value to vector of float
     out.push_back(exp(y[count] * log(x[count])));   
+    
+    ///Performs recursion on self while incresing the count value by 1
     return OwnPowFunc(x,  y, out, count+1);  
 }
 
 else{
+    ///Returns the vector as an output
     return out;
 }
 
 }
 
-
+///Input function that will only allow a set number of inputs to run the script.
+///Function uses recursion, it will output an int that will feed into a switch case
 int UserInputFunc(int userInput){
     std::cout << "What function would you like to run?" << "\n" <<std::endl;
     std::cout << "Find vector magnitude and; print and save n values (0)" << "\n" <<std::endl;
     std::cout << "Find line of best fit via least square fitting (1)" << "\n" <<std::endl;
     std::cout << "Find the result of x^y and; print and save n values (2)" << "\n" <<std::endl;
     std::cout << "Terminate script (3)" << "\n" <<std::endl;
+    
+    ///Takes in input and then checks if it valid
+    ///If it is invalid it will prompt the user to try again and call itself again.
     std::cin >> userInput;
     std::cout << "\n" <<std::endl;
     if(userInput !=0 and userInput !=1 and userInput !=2 and userInput !=3){
@@ -293,6 +311,29 @@ int UserInputFunc(int userInput){
         UserInputFunc(userInput);
     }
     else{
+    ///If the user has inputted an allowed value, that value will be returned
+    return userInput;
+    }
+}
+
+///Input function that will only allow a set number of inputs to run the script.
+///Function uses recursion, it will output an int that will feed into a switch case
+int ValidIntFunc(int userInput){
+    std::cout << "How many values would you like to display and save?" << "\n" <<std::endl;
+    ///Takes in input and then checks if it valid
+    ///If it is invalid it will prompt the user to try again and call itself again.
+    std::cin >> userInput;
+    std::cout << "\n" <<std::endl;
+    if(!std::isdigit(userInput)){
+        std::cout << "Invalid response please enter a positive integer" << "\n" <<std::endl;
+        ValidIntFunc(userInput);
+    }
+    else if (userInput < 0){
+      std::cout << "Invalid response please enter a positive integer" << "\n" <<std::endl;
+      ValidIntFunc(userInput);
+    }
+    else{
+    ///If the user has inputted an allowed value, that value will be returned
     return userInput;
     }
 }
