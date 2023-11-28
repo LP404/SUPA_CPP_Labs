@@ -109,9 +109,9 @@ return 0;
 
 
 
-int printFunc(std::vector<float> x, std::vector<float> y, std::vector<float> mag,int n);
+int printFunc(std::vector<float> x, std::vector<float> y, std::vector<float> result,int n, bool isMag);
 
-int printFunc(std::vector<float> x, std::vector<float> y, std::vector<float> mag, int n){
+int printFunc(std::vector<float> x, std::vector<float> y, std::vector<float> result, int n, bool isMag){
 
 
 ///We can safely assume in this case that each x will have a corresponding y value - 15/11/23?
@@ -123,8 +123,12 @@ if (n > x.size() and n < 5){
 
     for (int i = 0; i < n; i++){
 
-        std::cout << "Coordiante pair: "<< i+1 << " (" << x[i] << "," << y[i] << ") with magnitude"<< mag[i] << "\n" <<std::endl;
-
+        if (isMag == true){
+        std::cout << "Coordiante pair: "<< i+1 << " (" << x[i] << "," << y[i] << ") with magnitude: "<< result[i] << "\n" <<std::endl;
+        }
+        else{
+        std::cout << "Coordiante pair: "<< i+1 << " (" << x[i] << "," << y[i] << ") with x^y value of: "<< result[i] << "\n" <<std::endl;
+        }
 
     }
 
@@ -135,8 +139,12 @@ else if(n > x.size() and n <= 5){
     std::cout<<"Printing first five coordiante pairs."<< "\n" <<std::endl;
 
     for (int i = 0; i < 5; i++){
-        std::cout << "Coordiante pair: "<< i+1 << " (" << x[i] << "," << y[i] << ") with magnitude"<< mag[i] << "\n" <<std::endl;
-
+        if (isMag == true){
+        std::cout << "Coordiante pair: "<< i+1 << " (" << x[i] << "," << y[i] << ") with magnitude: "<< result[i] << "\n" <<std::endl
+        }
+        else{
+        std::cout << "Coordiante pair: "<< i+1 << " (" << x[i] << "," << y[i] << ") with x^y value of: "<< result[i] << "\n" <<std::endl
+        }
     }
 
 }
@@ -144,26 +152,16 @@ else if(n > x.size() and n <= 5){
 else{
     std::cout<<"Printing " << n << " coordiante pairs."<< "\n" << std::endl;
     for (int i = 0; i < n; i++){
-        std::cout << "Coordiante pair: "<< i+1 << " (" << x[i] << "," << y[i] << ") with magnitude : "<< mag[i] << "\n" <<std::endl;
-
+        if (isMag == true){
+        std::cout << "Coordiante pair: "<< i+1 << " (" << x[i] << "," << y[i] << ") with magnitude: "<< result[i] << "\n" <<std::endl;
+        }
+        else{
+        std::cout << "Coordiante pair: "<< i+1 << " (" << x[i] << "," << y[i] << ")  with x^y value of: "<< result[i] << "\n" <<std::endl;    
+        }
     }
 
 
 }
-return 0;
-}
-
-int printFunc(std::vector<float> x,std::vector<float> y,std::vector<float> xyPow);
-
-int printFunc(std::vector<float> x,std::vector<float> y,std::vector<float> xyPow){
-
-    int n = xyPow.size();
-
-    for (int i = 0; i < n; i++){
-        std::cout << "The result of: "<< x[i] << " to the power of " << y[i] << " is: "<< xyPow[i] << "\n" <<std::endl;
-    }
-
-
 return 0;
 }
 
@@ -171,9 +169,9 @@ int printFunc(float m,float c,float chiSq);
 
 int printFunc(float m,float c,float chiSq){
 
-    std::cout<< "The gradient is : " << m << "\n" << std::endl;
-    std::cout<< "The y-intercept is : " << c << "\n" << std::endl;
-    std::cout<< "This fit has a Chi Squared / NDF value of : " << chiSq << "\n" << std::endl;
+    std::cout<< "The gradient is: " << m << "\n" << std::endl;
+    std::cout<< "The y-intercept is: " << c << "\n" << std::endl;
+    std::cout<< "This fit has a Chi Squared / NDF value of: " << chiSq << "\n" << std::endl;
 
 return 0;
 }
@@ -286,37 +284,56 @@ auto ret2 = ReadFunc("error2D_float.txt");
 
 int userInput;
 std::cout << "What function would you like to run?" << "\n" <<std::endl;
-std::cout << "Find vector magnitude (0)" << "\n" <<std::endl;
+std::cout << "Find vector magnitude and print n values(0)" << "\n" <<std::endl;
 std::cout << "Find line of best fit via least square fitting (1)" << "\n" <<std::endl;
-std::cout << "Find the result of x^y (2)" << "\n" <<std::endl;
+std::cout << "Find the result of x^y and print n values(2)" << "\n" <<std::endl;
 std::cin >> userInput;
 
+switch (userInput) {
+  case 0:
+    std::vector<float> mag;
+    int n;
+    mag = magCal(x,y);
 
+    printFunc(x,y,mag,int n)
+    WriteFunc("MagFiles",x, y, mag, true);
+    printFunc(x,y,powXY,n,true);
 
-float m;
-float c;
-float chiSq;
-std::vector<float> mag;
-std::vector<float> powXY;
-
-mag = magCal(x,y);
-
-auto rawrXD = LsqFit(x,y,xErr,yErr);
-    m = std::get<0>(rawrXD);
-    c = std::get<1>(rawrXD);
-    chiSq = std::get<2>(rawrXD);
+    break;
+  
+  
+  case 1:
+    float m;
+    float c;
+    float chiSq;
     
-std::vector<float> out;
+    
+    auto rawrXD = LsqFit(x,y,xErr,yErr);
+        m = std::get<0>(rawrXD);
+        c = std::get<1>(rawrXD);
+        chiSq = std::get<2>(rawrXD);
+        WriteFunc("lineFiles",m, c, chiSq);
+        printFunc(m,c,chiSq);
 
-powXY = OwnPowFunc(x,y,out,0);
 
+    break;
+  
+  
+  case 2:
+    int n;
+    std::vector<float> powXY;
+    std::vector<float> out;
+    powXY = OwnPowFunc(x,y,out,0);
+    WriteFunc("powerXtoY",x, y, powXY, false);
+    printFunc(x,y,powXY,n,false);
+}
 
 /// Printing some functions - 22/11/23
 
 
-WriteFunc("MagFiles",x, y, mag, true);
-WriteFunc("powerXtoY",x, y, powXY, false);
-WriteFunc("lineFiles",m, c, chiSq);
+
+
+
 
 return 0;
 }
