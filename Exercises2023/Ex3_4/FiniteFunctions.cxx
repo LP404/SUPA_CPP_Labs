@@ -4,9 +4,8 @@
 #include "FiniteFunctions.h"
 #include <filesystem> //To check extensions in a nice way
 
-#include "/workspaces/SUPA_CPP_Labs/GNUplot/gnuplot-iostream.h" //Needed to produce plots (not part of the course) 
+#include "gnuplot-iostream.h" //Needed to produce plots (not part of the course) 
 
-#pragma warning (disable : 276)
 using std::filesystem::path;
 
 //Empty constructor
@@ -86,8 +85,6 @@ double FiniteFunction::integral(int Ndiv) { //public
 */
 // Generate paths from user defined stem
 void FiniteFunction::checkPath(std::string outfile){
- #pragma warning (disable : 20)
- #pragma warning (disable : 65)
  path fp = outfile;
  m_FunctionName = fp.stem(); 
  m_OutData = m_FunctionName+".data";

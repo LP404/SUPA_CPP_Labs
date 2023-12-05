@@ -1,6 +1,6 @@
 #include <string>
 #include <vector>
-#include "/workspaces/SUPA_CPP_Labs/GNUplot/gnuplot-iostream.h"
+#include "gnuplot-iostream.h"
 
 #pragma once //Replacement for IFNDEF
 
