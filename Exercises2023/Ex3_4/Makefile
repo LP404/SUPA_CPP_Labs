@@ -1,7 +1,7 @@
 CC=g++ #Name of compiler
 FLAGS=-std=c++20 -w #Compiler flags (the s makes it silent)
-TARGET=Test #Executable name
-OBJECTS=Test.o FiniteFunctions.o
+TARGET=FiniteFunctions #Executable name
+OBJECTS=FiniteFunctions.o
 LIBS=-I ../../GNUplot/ -lboost_iostreams
 
 #First target in Makefile is default
