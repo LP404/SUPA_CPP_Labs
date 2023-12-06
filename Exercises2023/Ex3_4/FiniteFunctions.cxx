@@ -62,9 +62,27 @@ Integration by hand (output needed to normalise function when plotting)
 ###################
 */ 
 double FiniteFunction::integrate(int Ndiv){ //private
-  //ToDo write an integrator
-  return -99;  
+  double delX;
+  double x;
+  double Sum;
+  Sum = 0.0;
+  x = rangeMin();
+  delX = (rangeMax() - rangeMin()) / static_cast<double>(Ndiv);
+  while(x <= rangeMax()){
+    if(x == rangeMin()){
+      Sum += 2.0 * invxsquared(x);
+    }
+    else if(x >= rangeMax()){
+      Sum += 2.0 * invxsquared(x);
+    }
+    else{
+      Sum += invxsquared(x);
+    }
+    x += delX;
+  }
+  return (delX/2) * Sum;  
 }
+
 double FiniteFunction::integral(int Ndiv) { //public
   if (Ndiv <= 0){
     std::cout << "Invalid number of divisions for integral, setting Ndiv to 1000" <<std::endl;

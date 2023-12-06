@@ -5,7 +5,7 @@
 
 int main(){
 
-    FiniteFunction func(0,1,"Output");
+    FiniteFunction func(-5,5,"Output");
     func.plotFunction();
 
 
