@@ -58,5 +58,6 @@ public:
 private:
     double m_Mean;
     double m_StdDev;
+    double Gauss(double x);
 };
 
