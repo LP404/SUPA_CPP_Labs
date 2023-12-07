@@ -47,3 +47,16 @@ protected:
 private:
   double invxsquared(double x); //The default functional form
 };
+
+class GaussianFunction : public FiniteFunction {
+public:
+    GaussianFunction(); // Empty constructor
+    GaussianFunction(double mean, double stddev, double range_min, double range_max, std::string outfile); // Variable constructor
+    ~GaussianFunction(); // Destructor
+    double callFunction(double x) override; // Override the function evaluation for a Gaussian
+    void printInfo() override; // Override print function to provide Gaussian specific info
+private:
+    double m_Mean;
+    double m_StdDev;
+};
+
