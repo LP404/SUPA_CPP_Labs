@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cmath>
 #include "FiniteFunctions.h"
 #include <filesystem> //To check extensions in a nice way
 
@@ -56,6 +57,20 @@ double FiniteFunction::rangeMax() {return m_RMax;};
 double FiniteFunction::invxsquared(double x) {return 1/(1+x*x);};
 double FiniteFunction::callFunction(double x) {return this->invxsquared(x);}; //(overridable)
 
+double GaussFunction::Gauss(double x, double mean, double std) {
+  
+  
+  return 1/(1+x*x);
+  
+  };
+double GaussFunction::callFunction(double x) {return this->Gauss(x);}; //(overridable)
+
+double CauchyLorentzFunction::CaLo(double x) {return 1/(1+x*x);};
+double CauchyLorentzFunction::callFunction(double x) {return this->CaLo(x);}; //(overridable)
+
+double CrystalBallFunction::Cryst(double x) {return 1/(1+x*x);};
+double CrystalBallFunction::callFunction(double x) {return this->Cryst(x);}; //(overridable)
+
 /*
 ###################
 Integration by hand (output needed to normalise function when plotting)
@@ -70,13 +85,13 @@ double FiniteFunction::integrate(int Ndiv){ //private
   delX = (rangeMax() - rangeMin()) / static_cast<double>(Ndiv);
   while(x <= rangeMax()){
     if(x == rangeMin()){
-      Sum += 2.0 * invxsquared(x);
+      Sum += 2.0 * callFunction(x);
     }
     else if(x >= rangeMax()){
-      Sum += 2.0 * invxsquared(x);
+      Sum += 2.0 * callFunction(x);
     }
     else{
-      Sum += invxsquared(x);
+      Sum += callFunction(x);
     }
     x += delX;
   }
@@ -95,6 +110,55 @@ double FiniteFunction::integral(int Ndiv) { //public
   }
   else return m_Integral; //Don't bother re-calculating integral if Ndiv is the same as the last call
 }
+
+/*
+###################
+//Data Read In 
+###################
+*/
+
+std::vector<double> ReadFunc(std::string fName){
+
+///Opens a file, ready for reading in data
+std::ifstream myInput(fName);
+
+///Checks if this file is open, terminates function if that is not the case. Notifies user
+if(!myInput.is_open()){
+    std::cout<<"File is not open"<<std::endl;
+    exit(1);
+}
+
+///Initilises variables that will be used to store data
+double valHold;
+std::vector<double> val;
+std::string strHold;
+std::string line;
+
+///Reads in each data from each line, seperated by the comma
+///The first loop will read in data but not assign the strings to anything
+///Appends data to two vectors, while converting the string it reads in, to a float
+while(getline(myInput,line)){
+    //The loop will 'discard' the string values
+    std::stringstream findLine(line);
+    getline(findLine,strHold);
+    val.push_back(std::stod(strHold));
+}
+
+///Closes the file and returns values out of the fucntion
+myInput.close();
+return val;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 /*
 ###################

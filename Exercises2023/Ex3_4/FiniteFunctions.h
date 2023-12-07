@@ -1,8 +1,11 @@
 #include <string>
 #include <vector>
+#include <cmath>
 #include "gnuplot-iostream.h"
 
 #pragma once //Replacement for IFNDEF
+
+std::vector<double> ReadFunc(std::string fName); 
 
 class FiniteFunction{
 
@@ -48,16 +51,47 @@ private:
   double invxsquared(double x); //The default functional form
 };
 
-class GaussianFunction : public FiniteFunction {
+class GaussFunction : public FiniteFunction {
 public:
-    GaussianFunction(); // Empty constructor
-    GaussianFunction(double mean, double stddev, double range_min, double range_max, std::string outfile); // Variable constructor
-    ~GaussianFunction(); // Destructor
+    GaussFunction(); // Empty constructor
+    GaussFunction(double mean, double stddev, double range_min, double range_max, std::string outfile); // Variable constructor
+    ~GaussFunction(); // Destructor
     double callFunction(double x) override; // Override the function evaluation for a Gaussian
     void printInfo() override; // Override print function to provide Gaussian specific info
+
 private:
     double m_Mean;
     double m_StdDev;
     double Gauss(double x);
 };
 
+class CauchyLorentzFunction : public FiniteFunction {
+public:
+    CauchyLorentzFunction(); // Empty constructor
+    CauchyLorentzFunction(double location, double scale, double range_min, double range_max, std::string outfile); // Variable constructor
+    ~CauchyLorentzFunction(); // Destructor
+    double callFunction(double x) override; // Override the function evaluation for a Gaussian
+    void printInfo() override; // Override print function to provide Cauchy-Lorentz specific info
+
+private:
+    double m_Mean;
+    double m_StdDev;
+    double CaLo(double x);
+};
+
+
+class CrystalBallFunction : public FiniteFunction {
+public:
+    CrystalBallFunction(); // Empty constructor
+    CrystalBallFunction(double mean, double sigma, double alpha, double n, double range_min, double range_max, std::string outfile); // Variable constructor
+    ~CrystalBallFunction(); // Destructor
+    double callFunction(double x) override; // Override the function evaluation for a Gaussian
+    void printInfo() override; // Override print function to provide Crystal Ball specific info
+
+private:
+    double m_Mean;
+    double m_Sigma;
+    double m_Alpha;
+    double m_n;
+    double Cryst(double x);
+};
