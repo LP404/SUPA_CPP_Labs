@@ -57,13 +57,8 @@ double FiniteFunction::rangeMax() {return m_RMax;};
 double FiniteFunction::invxsquared(double x) {return 1/(1+x*x);};
 double FiniteFunction::callFunction(double x) {return this->invxsquared(x);}; //(overridable)
 
-double GaussFunction::Gauss(double x, double mean, double std) {
-  
-  
-  return 1/(1+x*x);
-  
-  };
-double GaussFunction::callFunction(double x) {return this->Gauss(x);}; //(overridable)
+double GaussFunction::Gauss(double x, double mean, double std) {return 1/(1+x*x);};
+double GaussFunction::callFunction(double x, double mean, double std) {return this->Gauss(x);}; //(overridable)
 
 double CauchyLorentzFunction::CaLo(double x) {return 1/(1+x*x);};
 double CauchyLorentzFunction::callFunction(double x) {return this->CaLo(x);}; //(overridable)

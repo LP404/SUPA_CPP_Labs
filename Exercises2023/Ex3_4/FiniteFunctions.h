@@ -25,7 +25,7 @@ public:
   //Plot the supplied data points (either provided data or points sampled from function) as a histogram using NBins
   void plotData(std::vector<double> &points, int NBins, bool isdata=true); //NB! use isdata flag to pick between data and sampled distributions
   virtual void printInfo(); //Dump parameter info about the current function (Overridable)
-  virtual double callFunction(double x); //Call the function with value x (Overridable)
+  double callFunction(double x); //Call the function with value x (Overridable) <- No need - LP
 
   //Protected members can be accessed by child classes but not users
 protected:
@@ -56,13 +56,13 @@ public:
     GaussFunction(); // Empty constructor
     GaussFunction(double mean, double stddev, double range_min, double range_max, std::string outfile); // Variable constructor
     ~GaussFunction(); // Destructor
-    double callFunction(double x) override; // Override the function evaluation for a Gaussian
+    double callFunction(double x, double mean, double std); 
     void printInfo() override; // Override print function to provide Gaussian specific info
 
 private:
     double m_Mean;
     double m_StdDev;
-    double Gauss(double x);
+    double Gauss(double x, double mean, double std);
 };
 
 class CauchyLorentzFunction : public FiniteFunction {
@@ -70,7 +70,7 @@ public:
     CauchyLorentzFunction(); // Empty constructor
     CauchyLorentzFunction(double location, double scale, double range_min, double range_max, std::string outfile); // Variable constructor
     ~CauchyLorentzFunction(); // Destructor
-    double callFunction(double x) override; // Override the function evaluation for a Gaussian
+    double callFunction(double x); // Override the function evaluation for a Gaussian
     void printInfo() override; // Override print function to provide Cauchy-Lorentz specific info
 
 private:
@@ -85,7 +85,7 @@ public:
     CrystalBallFunction(); // Empty constructor
     CrystalBallFunction(double mean, double sigma, double alpha, double n, double range_min, double range_max, std::string outfile); // Variable constructor
     ~CrystalBallFunction(); // Destructor
-    double callFunction(double x) override; // Override the function evaluation for a Gaussian
+    double callFunction(double x); // Override the function evaluation for a Gaussian
     void printInfo() override; // Override print function to provide Crystal Ball specific info
 
 private:
