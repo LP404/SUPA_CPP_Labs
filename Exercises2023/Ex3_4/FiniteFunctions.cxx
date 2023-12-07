@@ -41,6 +41,9 @@ void FiniteFunction::setRangeMin(double RMin) {m_RMin = RMin;};
 void FiniteFunction::setRangeMax(double RMax) {m_RMax = RMax;};
 void FiniteFunction::setOutfile(std::string Outfile) {this->checkPath(Outfile);};
 
+void GaussFunction::setMean(double Rmean) {m_Mean = Rmean;};
+void GaussFunction::setStandardDev(double Rstd) {m_StdDev = Rstd;};
+
 /*
 ###################
 //Getters
@@ -48,6 +51,9 @@ void FiniteFunction::setOutfile(std::string Outfile) {this->checkPath(Outfile);}
 */ 
 double FiniteFunction::rangeMin() {return m_RMin;};
 double FiniteFunction::rangeMax() {return m_RMax;};
+
+double GaussFunction::gdistMean() {return m_Mean;};
+double GaussFunction::gdistStandardDev() {return m_StdDev;};
 
 /*
 ###################
@@ -57,8 +63,12 @@ double FiniteFunction::rangeMax() {return m_RMax;};
 double FiniteFunction::invxsquared(double x) {return 1/(1+x*x);};
 double FiniteFunction::callFunction(double x) {return this->invxsquared(x);}; //(overridable)
 
-double GaussFunction::Gauss(double x, double mean, double std) {return 1/(1+x*x);};
-double GaussFunction::callFunction(double x, double mean, double std) {return this->Gauss(x);}; //(overridable)
+double GaussFunction::Gauss(double x) {
+
+return (1.0/(gdistStandardDev()*(sqrt(2*M_PI))))*exp((-1.0/2.0)*(((x-gdistMean())/gdistStandardDev())*((x-gdistMean())/gdistStandardDev())));  
+};
+
+double GaussFunction::callFunction(double x) {return this->Gauss(x);}; //(overridable)
 
 double CauchyLorentzFunction::CaLo(double x) {return 1/(1+x*x);};
 double CauchyLorentzFunction::callFunction(double x) {return this->CaLo(x);}; //(overridable)
