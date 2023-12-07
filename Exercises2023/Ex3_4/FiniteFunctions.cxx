@@ -25,6 +25,27 @@ FiniteFunction::FiniteFunction(double range_min, double range_max, std::string o
   this->checkPath(outfile); //Use provided string to name output files
 }
 
+//initialised constructor
+GaussFunction::GaussFunction(double range_min, double range_max, double mean, double standev,std::string outfile){
+  m_RMin = range_min;
+  m_RMax = range_max;
+  m_Mean = mean;
+  m_StdDev = standev;
+  m_Integral = NULL;
+  this->checkPath(outfile); //Use provided string to name output files
+}
+
+//initialised constructor
+CauchyLorentzFunction::CauchyLorentzFunction(double range_min, double range_max, double x0, double gamma,std::string outfile){
+  m_RMin = range_min;
+  m_RMax = range_max;
+  m_x0 = x0;
+  m_Gamma = gamma;
+  m_Integral = NULL;
+  this->checkPath(outfile); //Use provided string to name output files
+}
+
+
 //Plots are called in the destructor
 //SUPACPP note: They syntax of the plotting code is not part of the course
 FiniteFunction::~FiniteFunction(){
@@ -44,6 +65,13 @@ void FiniteFunction::setOutfile(std::string Outfile) {this->checkPath(Outfile);}
 void GaussFunction::setMean(double Rmean) {m_Mean = Rmean;};
 void GaussFunction::setStandardDev(double Rstd) {m_StdDev = Rstd;};
 
+void CauchyLorentzFunction::setX0(double Rx0) {m_x0 = Rx0;};
+void CauchyLorentzFunction::setGamma(double Rgamma) {m_Gamma = Rgamma;};
+
+void CrystalBallFunction::SetCrystAlpha(double Ralpha) {m_Alpha = Ralpha;}; 
+void CrystalBallFunction::SetCrystn(double Rn) {m_n = Rn;}; 
+void CrystalBallFunction::SetCrystStanDev(double RstDev) {m_stanDev = RstDev;}; 
+
 /*
 ###################
 //Getters
@@ -55,6 +83,16 @@ double FiniteFunction::rangeMax() {return m_RMax;};
 double GaussFunction::gdistMean() {return m_Mean;};
 double GaussFunction::gdistStandardDev() {return m_StdDev;};
 
+double CauchyLorentzFunction::CoLoX0() {return m_x0;};
+double CauchyLorentzFunction::CoLoGamma() {return m_Gamma;};
+
+
+double CrystalBallFunction::crystAlpha() {return m_Alpha;}; 
+double CrystalBallFunction::crystn() {return m_n;}; 
+double CrystalBallFunction::crystStanDev() {return m_stanDev;}; 
+
+
+
 /*
 ###################
 //Function eval
@@ -64,16 +102,37 @@ double FiniteFunction::invxsquared(double x) {return 1/(1+x*x);};
 double FiniteFunction::callFunction(double x) {return this->invxsquared(x);}; //(overridable)
 
 double GaussFunction::Gauss(double x) {
-
 return (1.0/(gdistStandardDev()*(sqrt(2*M_PI))))*exp((-1.0/2.0)*(((x-gdistMean())/gdistStandardDev())*((x-gdistMean())/gdistStandardDev())));  
 };
-
 double GaussFunction::callFunction(double x) {return this->Gauss(x);}; //(overridable)
 
-double CauchyLorentzFunction::CaLo(double x) {return 1/(1+x*x);};
+double CauchyLorentzFunction::CaLo(double x) {
+   return (1.0/(M_PI*CoLoGamma()*(1.0+(((x-CoLoX0())/CoLoGamma())*((x-CoLoX0())/CoLoGamma())))));
+};
 double CauchyLorentzFunction::callFunction(double x) {return this->CaLo(x);}; //(overridable)
 
-double CrystalBallFunction::Cryst(double x) {return 1/(1+x*x);};
+double CrystalBallFunction::Cryst(double x) {
+      double mean;
+      double a;
+      double b;
+      double A;
+      double B;
+      double N;
+      double C;
+      double D;
+
+      b = rangeMax();
+      a = rangeMin();
+
+      mean = (b-a) / 2
+
+    if (((x-mean)/crystStanDev()) <= -crystAlpha()){
+        return (A*pow((B-((x-mean)/crystStanDev())),-crystn()));
+    } else {
+        return (exp(-((x-mean)*(x-mean))/(2*crystStanDev()*crystStanDev())));
+    }
+};
+
 double CrystalBallFunction::callFunction(double x) {return this->Cryst(x);}; //(overridable)
 
 /*
