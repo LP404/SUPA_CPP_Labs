@@ -19,6 +19,21 @@ FiniteFunction::FiniteFunction(){
   m_Integral = NULL;
 }
 
+Ex34Functions::Ex34Functions(){
+  m_RMin = -5;
+  m_RMax = 5;
+  this->checkPath("DefaultFunction"); //Use provided string to name output files
+  m_Integral = NULL;
+}
+
+
+Ex34Functions::Ex34Functions(double range_min, double range_max, std::string outfile){
+  m_RMin = range_min;
+  m_RMax = range_max;
+  m_Integral = NULL;
+  this->checkPath(outfile); //Use provided string to name output files
+}
+
 //initialised constructor
 FiniteFunction::FiniteFunction(double range_min, double range_max, std::string outfile){
   m_RMin = range_min;
@@ -36,12 +51,69 @@ FiniteFunction::~FiniteFunction(){
 
 /*
 ###################
+//Data In
+###################
+*/ 
+
+std::vector<double> ReadFunc(std::string fName){
+
+///Opens a file, ready for reading in data
+std::ifstream myInput(fName);
+
+///Checks if this file is open, terminates function if that is not the case. Notifies user
+if(!myInput.is_open()){
+    std::cout<<"File is not open"<<std::endl;
+    exit(1);
+}
+
+///Initilises variables that will be used to store data
+double valHold;
+std::vector<double> val;
+std::string strHold;
+std::string line;
+
+///Reads in each data from each line, seperated by the comma
+///The first loop will read in data but not assign the strings to anything
+///Appends data to two vectors, while converting the string it reads in, to a float
+while(getline(myInput,line)){
+    //The loop will 'discard' the string values
+    std::stringstream findLine(line);
+    getline(findLine,strHold);
+    val.push_back(std::stod(strHold));
+}
+
+///Closes the file and returns values out of the fucntion
+myInput.close();
+return val;
+}
+
+
+/*
+###################
 //Setters
 ###################
 */ 
 void FiniteFunction::setRangeMin(double RMin) {m_RMin = RMin;};
 void FiniteFunction::setRangeMax(double RMax) {m_RMax = RMax;};
 void FiniteFunction::setOutfile(std::string Outfile) {this->checkPath(Outfile);};
+
+void Ex34Functions::setMu(double Rmu) {m_Mu = Rmu;};
+void Ex34Functions::setStandardDev(double Rstd) {m_StdDev = Rstd;};
+
+void Ex34Functions::setX0(double Rx0) {m_x0 = Rx0;};
+void Ex34Functions::setGamma(double Rgamma) {m_Gamma = Rgamma;};
+
+void Ex34Functions::SetCrystAlpha(double Ralpha) {m_Alpha = Ralpha;}; 
+void Ex34Functions::SetCrystn(double Rn) {m_n = Rn;}; 
+void Ex34Functions::SetCrystStanDev(double RstDev) {m_stanDev = RstDev;}; 
+void Ex34Functions::SetCoefs(double Ralpha, double Rn, double RstDev){
+
+m_A = (pow((Rn/Ralpha),Rn))*exp(-((Ralpha*Ralpha)/2));
+m_B = (Rn/Rn)-Ralpha;
+m_C = (Rn/Ralpha)*(1/(Rn-1))*exp(-((Ralpha*Ralpha)/2));
+m_D = sqrt(M_PI_2)*(1+std::erf(Rn/sqrt(2)));
+m_N = 1/(RstDev*(m_C+m_D));
+}
 
 /*
 ###################
@@ -51,6 +123,20 @@ void FiniteFunction::setOutfile(std::string Outfile) {this->checkPath(Outfile);}
 double FiniteFunction::rangeMin() {return m_RMin;};
 double FiniteFunction::rangeMax() {return m_RMax;};
 
+double Ex34Functions::gdistMu() {return m_Mu;};
+double Ex34Functions::gdistStandardDev() {return m_StdDev;};
+
+double Ex34Functions::CoLoX0() {return m_x0;};
+double Ex34Functions::CoLoGamma() {return m_Gamma;};
+
+
+double Ex34Functions::crystAlpha() {return m_Alpha;}; 
+double Ex34Functions::crystn() {return m_n;}; 
+double Ex34Functions::crystStanDev() {return m_stanDev;};
+std::tuple<double, double, double, double, double> Ex34Functions::crystCoeff() {
+  return std::tuple<double, double, double, double, double>{m_A, m_B, m_C, m_D, m_N};};
+
+
 /*
 ###################
 //Function eval
@@ -59,14 +145,71 @@ double FiniteFunction::rangeMax() {return m_RMax;};
 double FiniteFunction::invxsquared(double x) {return 1/(1+x*x);};
 double FiniteFunction::callFunction(double x) {return this->invxsquared(x);}; //(overridable)
 
+double Ex34Functions::Gaussian(double x) {
+return (1.0/(gdistStandardDev()*(sqrt(2*M_PI))))*exp((-1.0/2.0)*(((x-gdistMu())/gdistStandardDev())*((x-gdistMu())/gdistStandardDev())));  
+};
+
+double Ex34Functions::CauchyLorentz(double x) {
+   return (1.0/(M_PI*CoLoGamma()*(1.0+(((x-CoLoX0())/CoLoGamma())*((x-CoLoX0())/CoLoGamma())))));
+};
+
+//This is probably very inefficent
+double Ex34Functions::CrystalBall(double x) {
+      double average;
+      double a;
+      double b;
+      double A;
+      double B;
+      double C;
+      double D;
+      double N;
+
+      auto crstCoeffs = crystCoeff();
+        A = std::get<0>(crstCoeffs);
+        B = std::get<1>(crstCoeffs);
+        C = std::get<2>(crstCoeffs);
+        D = std::get<2>(crstCoeffs);
+        N = std::get<2>(crstCoeffs);
+
+      ///The average of an evenly space distrubtion should be equal to the sum of the start and end / 2
+      b = rangeMax();
+      a = rangeMin();
+
+      average = (b+a) / 2;
+
+    if (((x-average)/crystStanDev()) <= -crystAlpha()){
+        return (A*pow((B-((x-average)/crystStanDev())),-crystn()));
+    } else {
+        return (exp(-((x-average)*(x-average))/(2*crystStanDev()*crystStanDev())));
+    }
+};
+
+double Ex34Functions::callFunction(double x) {
+    if (selectDist == 0) {
+        return this->Gaussian(x);}
+    else if (selectDist == 1) {
+        return this->CauchyLorentz(x);}
+    else if (selectDist == 2) {
+        return this->CrystalBall(x);}
+    else {
+        std::cout << "Invaid input, terminating" << std::endl;
+        exit(1);
+    }
+};
+
 /*
 ###################
 Integration by hand (output needed to normalise function when plotting)
 ###################
 */ 
 double FiniteFunction::integrate(int Ndiv){ //private
-  //ToDo write an integrator
-  return -99;  
+  //Integration Steps
+  double Sol = 0;
+  double step = (m_RMax - m_RMin)/(double)Ndiv;
+  for (double i=m_RMin; i<m_RMax; i+=step) {
+    Sol += (callFunction(i)*step);
+  }
+  return Sol;  
 }
 double FiniteFunction::integral(int Ndiv) { //public
   if (Ndiv <= 0){

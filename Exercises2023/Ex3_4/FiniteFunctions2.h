@@ -50,23 +50,56 @@ private:
 
 
 
-class CustomFunctions :: public FiniteFunction(){
+class Ex34Functions : public FiniteFunction{
     public:
+        Ex34Functions(); //Empty constructor
+        Ex34Functions(double range_min, double range_max, std::string outfile); //Variable constructor
+        ~Ex34Functions(); //Destructor
+        std::vector<double> ReadFunc(std::string fName); 
 
+        double callFunction(double x) override;                 
+        double Gaussian(double x);           
+        double CauchyLorentz(double x);                
+        double CrystalBall(double x); 
+
+        double gdistMu(); //Low end of the range the function is defined within
+        double gdistStandardDev(); //High end of the range the function is defined within
+        double CoLoX0(); //Low end of the range the function is defined within
+        double CoLoGamma(); //High end of the range the function is defined within
+        double crystAlpha(); //Low end of the range the function is defined within
+        double crystn(); //High end of the range the function is defined within
+        double crystStanDev(); //High end of the range the function is defined within
+        std::tuple<double, double, double, double, double> crystCoeff();              
+        
+        
+        void setMu(double Rmu);
+        void setStandardDev(double Rstd);
+        void setX0(double Rx0);
+        void setGamma(double Rgamma);
+        void SetCrystAlpha(double Ralpha); //Low end of the range the function is defined within
+        void SetCrystn(double Rn); //High end of the range the function is defined within
+        void SetCrystStanDev(double RstDev); //High end of the range the function is defined within
+        void SetCoefs(double Ralpha, double Rn, double RstDev);
+
+        int selectDist;
 
 
 
 
 
     private:
-    
 
+        double m_Mu;
+        double m_StdDev;
+        double m_x0;
+        double m_Gamma;
+        double m_stanDev;
+        double m_Alpha;
+        double m_n;
+        double m_A;
+        double m_B;
+        double m_C;
+        double m_D;
+        double m_N;
 
-
-
-
-
-
-
-
-}
+};
