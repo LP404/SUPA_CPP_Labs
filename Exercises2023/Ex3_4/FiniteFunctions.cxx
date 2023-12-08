@@ -66,6 +66,21 @@ FiniteFunction::~FiniteFunction(){
   this->generatePlot(gp); //Generate the plot and save it to a png using "outfile" for naming 
 }
 
+GaussFunction::~GaussFunction(){
+  Gnuplot gp; //Set up gnuplot object
+  this->generatePlot(gp); //Generate the plot and save it to a png using "outfile" for naming 
+}
+
+CauchyLorentzFunction::~CauchyLorentzFunction(){
+  Gnuplot gp; //Set up gnuplot object
+  this->generatePlot(gp); //Generate the plot and save it to a png using "outfile" for naming 
+}
+
+CrystalBallFunction::~CrystalBallFunction(){
+  Gnuplot gp; //Set up gnuplot object
+  this->generatePlot(gp); //Generate the plot and save it to a png using "outfile" for naming 
+}
+
 /*
 ###################
 //Setters
@@ -210,6 +225,19 @@ double FiniteFunction::integral(int Ndiv) { //public
   else return m_Integral; //Don't bother re-calculating integral if Ndiv is the same as the last call
 }
 
+double GaussFunction::integral(int Ndiv) { //public
+  if (Ndiv <= 0){
+    std::cout << "Invalid number of divisions for integral, setting Ndiv to 1000" <<std::endl;
+    Ndiv = 1000;
+  }
+  if (m_Integral == NULL || Ndiv != m_IntDiv){
+    m_IntDiv = Ndiv;
+    m_Integral = this->integrate(Ndiv);
+    return m_Integral;
+  }
+  else return m_Integral; //Don't bother re-calculating integral if Ndiv is the same as the last call
+}
+
 double GaussFunction::integrate(int Ndiv){ //private
   double delX;
   double x;
@@ -232,18 +260,6 @@ double GaussFunction::integrate(int Ndiv){ //private
   return (delX/2) * Sum;  
 }
 
-double GaussFunction::integral(int Ndiv) { //public
-  if (Ndiv <= 0){
-    std::cout << "Invalid number of divisions for integral, setting Ndiv to 1000" <<std::endl;
-    Ndiv = 1000;
-  }
-  if (m_Integral == NULL || Ndiv != m_IntDiv){
-    m_IntDiv = Ndiv;
-    m_Integral = this->integrate(Ndiv);
-    return m_Integral;
-  }
-  else return m_Integral; //Don't bother re-calculating integral if Ndiv is the same as the last call
-}
 
 double CauchyLorentzFunction::integrate(int Ndiv){ //private
   double delX;
@@ -267,19 +283,6 @@ double CauchyLorentzFunction::integrate(int Ndiv){ //private
   return (delX/2) * Sum;  
 }
 
-double CauchyLorentzFunction::integral(int Ndiv) { //public
-  if (Ndiv <= 0){
-    std::cout << "Invalid number of divisions for integral, setting Ndiv to 1000" <<std::endl;
-    Ndiv = 1000;
-  }
-  if (m_Integral == NULL || Ndiv != m_IntDiv){
-    m_IntDiv = Ndiv;
-    m_Integral = this->integrate(Ndiv);
-    return m_Integral;
-  }
-  else return m_Integral; //Don't bother re-calculating integral if Ndiv is the same as the last call
-}
-
 double CrystalBallFunction::integrate(int Ndiv){ //private
   double delX;
   double x;
@@ -300,19 +303,6 @@ double CrystalBallFunction::integrate(int Ndiv){ //private
     x += delX;
   }
   return (delX/2) * Sum;  
-}
-
-double CrystalBallFunction::integral(int Ndiv) { //public
-  if (Ndiv <= 0){
-    std::cout << "Invalid number of divisions for integral, setting Ndiv to 1000" <<std::endl;
-    Ndiv = 1000;
-  }
-  if (m_Integral == NULL || Ndiv != m_IntDiv){
-    m_IntDiv = Ndiv;
-    m_Integral = this->integrate(Ndiv);
-    return m_Integral;
-  }
-  else return m_Integral; //Don't bother re-calculating integral if Ndiv is the same as the last call
 }
 
 

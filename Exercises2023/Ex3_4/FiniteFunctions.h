@@ -54,18 +54,16 @@ private:
 
 class GaussFunction : public FiniteFunction {
 public:
+    GaussFunction(); // Empty constructor
+    GaussFunction(double range_min, double range_max, double mu, double standev,std::string outfile); // Variable constructor
+    ~GaussFunction(); // Destructor
     double gdistMu(); //Low end of the range the function is defined within
     double gdistStandardDev(); //High end of the range the function is defined within
     void setMu(double Rmu);
     void setStandardDev(double Rstd);
-    GaussFunction(); // Empty constructor
-    GaussFunction(double range_min, double range_max, double mu, double standev,std::string outfile); // Variable constructor
-    ~GaussFunction(); // Destructor
     double callFunction(double x) override; 
     void printInfo() override; 
     double integral(int Ndiv = 1000) override;
-
-
 private:
     double m_Mu;
     double m_StdDev;
@@ -75,13 +73,13 @@ private:
 
 class CauchyLorentzFunction : public FiniteFunction {
 public:
+    CauchyLorentzFunction(); // Empty constructor
+    CauchyLorentzFunction(double range_min, double range_max, double x0, double gamma,std::string outfile); // Variable constructor
+    ~CauchyLorentzFunction(); // Destructor
     double CoLoX0(); //Low end of the range the function is defined within
     double CoLoGamma(); //High end of the range the function is defined within
     void setX0(double Rx0);
     void setGamma(double Rgamma);
-    CauchyLorentzFunction(); // Empty constructor
-    CauchyLorentzFunction(double range_min, double range_max, double x0, double gamma,std::string outfile); // Variable constructor
-    ~CauchyLorentzFunction(); // Destructor
     double callFunction(double x) override;  
     void printInfo() override; 
 
@@ -94,7 +92,10 @@ private:
 
 
 class CrystalBallFunction : public FiniteFunction {
-
+public:
+    CrystalBallFunction(); // Empty constructor
+    CrystalBallFunction(double alpha, double n, double stdDev,double range_min, double range_max, std::string outfile); // Variable constructor
+    ~CrystalBallFunction(); // Destructor
     void SetCrystAlpha(double Ralpha); //Low end of the range the function is defined within
     void SetCrystn(double Rn); //High end of the range the function is defined within
     void SetCrystStanDev(double RstDev); //High end of the range the function is defined within
@@ -105,9 +106,6 @@ class CrystalBallFunction : public FiniteFunction {
     double crystStanDev(); //High end of the range the function is defined within
     std::tuple<double, double, double, double, double> crystCoeff();
 
-    CrystalBallFunction(); // Empty constructor
-    CrystalBallFunction(double alpha, double n, double stdDev,double range_min, double range_max, std::string outfile); // Variable constructor
-    ~CrystalBallFunction(); // Destructor
     double callFunction(double x) override; // Override the function evaluation for a Gaussian
     void printInfo() override; // Override print function to provide Crystal Ball specific info
 
