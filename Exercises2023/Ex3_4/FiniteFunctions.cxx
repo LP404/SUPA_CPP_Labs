@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include <tuple>
 #include "FiniteFunctions.h"
 #include <filesystem> //To check extensions in a nice way
 
@@ -26,10 +27,10 @@ FiniteFunction::FiniteFunction(double range_min, double range_max, std::string o
 }
 
 //initialised constructor
-GaussFunction::GaussFunction(double range_min, double range_max, double mean, double standev,std::string outfile){
+GaussFunction::GaussFunction(double range_min, double range_max, double mu, double standev,std::string outfile){
   m_RMin = range_min;
   m_RMax = range_max;
-  m_Mean = mean;
+  m_Mu = mu;
   m_StdDev = standev;
   m_Integral = NULL;
   this->checkPath(outfile); //Use provided string to name output files
@@ -44,6 +45,18 @@ CauchyLorentzFunction::CauchyLorentzFunction(double range_min, double range_max,
   m_Integral = NULL;
   this->checkPath(outfile); //Use provided string to name output files
 }
+
+//initialised constructor
+CrystalBallFunction::CrystalBallFunction(double alpha, double n, double stdDev,double range_min, double range_max, std::string outfile){
+  m_RMin = range_min;
+  m_RMax = range_max;
+  m_Alpha = alpha;
+  m_n = n;
+  m_stanDev = stdDev;
+  m_Integral = NULL;
+  this->checkPath(outfile); //Use provided string to name output files
+}
+
 
 
 //Plots are called in the destructor
@@ -62,7 +75,7 @@ void FiniteFunction::setRangeMin(double RMin) {m_RMin = RMin;};
 void FiniteFunction::setRangeMax(double RMax) {m_RMax = RMax;};
 void FiniteFunction::setOutfile(std::string Outfile) {this->checkPath(Outfile);};
 
-void GaussFunction::setMean(double Rmean) {m_Mean = Rmean;};
+void GaussFunction::setMu(double Rmu) {m_Mu = Rmu;};
 void GaussFunction::setStandardDev(double Rstd) {m_StdDev = Rstd;};
 
 void CauchyLorentzFunction::setX0(double Rx0) {m_x0 = Rx0;};
@@ -71,6 +84,15 @@ void CauchyLorentzFunction::setGamma(double Rgamma) {m_Gamma = Rgamma;};
 void CrystalBallFunction::SetCrystAlpha(double Ralpha) {m_Alpha = Ralpha;}; 
 void CrystalBallFunction::SetCrystn(double Rn) {m_n = Rn;}; 
 void CrystalBallFunction::SetCrystStanDev(double RstDev) {m_stanDev = RstDev;}; 
+void CrystalBallFunction::SetCoefs(double Ralpha, double Rn, double RstDev){
+
+m_A = (pow((Rn/Ralpha),Rn))*exp(-((Ralpha*Ralpha)/2));
+m_B = (Rn/Rn)-Ralpha;
+m_C = (Rn/Ralpha)*(1/(Rn-1))*exp(-((Ralpha*Ralpha)/2));
+m_D = sqrt(M_PI_2)*(1+std::erf(Rn/sqrt(2)));
+m_N = 1/(RstDev*(m_C+m_D));
+
+};
 
 /*
 ###################
@@ -80,7 +102,7 @@ void CrystalBallFunction::SetCrystStanDev(double RstDev) {m_stanDev = RstDev;};
 double FiniteFunction::rangeMin() {return m_RMin;};
 double FiniteFunction::rangeMax() {return m_RMax;};
 
-double GaussFunction::gdistMean() {return m_Mean;};
+double GaussFunction::gdistMu() {return m_Mu;};
 double GaussFunction::gdistStandardDev() {return m_StdDev;};
 
 double CauchyLorentzFunction::CoLoX0() {return m_x0;};
@@ -89,7 +111,10 @@ double CauchyLorentzFunction::CoLoGamma() {return m_Gamma;};
 
 double CrystalBallFunction::crystAlpha() {return m_Alpha;}; 
 double CrystalBallFunction::crystn() {return m_n;}; 
-double CrystalBallFunction::crystStanDev() {return m_stanDev;}; 
+double CrystalBallFunction::crystStanDev() {return m_stanDev;};
+std::tuple<double, double, double, double, double> CrystalBallFunction::crystCoeff() {
+  return std::tuple<double, double, double, double, double>{m_A, m_B, m_C, m_D, m_N};};
+
 
 
 
@@ -102,7 +127,7 @@ double FiniteFunction::invxsquared(double x) {return 1/(1+x*x);};
 double FiniteFunction::callFunction(double x) {return this->invxsquared(x);}; //(overridable)
 
 double GaussFunction::Gauss(double x) {
-return (1.0/(gdistStandardDev()*(sqrt(2*M_PI))))*exp((-1.0/2.0)*(((x-gdistMean())/gdistStandardDev())*((x-gdistMean())/gdistStandardDev())));  
+return (1.0/(gdistStandardDev()*(sqrt(2*M_PI))))*exp((-1.0/2.0)*(((x-gdistMu())/gdistStandardDev())*((x-gdistMu())/gdistStandardDev())));  
 };
 double GaussFunction::callFunction(double x) {return this->Gauss(x);}; //(overridable)
 
@@ -111,25 +136,35 @@ double CauchyLorentzFunction::CaLo(double x) {
 };
 double CauchyLorentzFunction::callFunction(double x) {return this->CaLo(x);}; //(overridable)
 
+//This is probably very inefficent
+
 double CrystalBallFunction::Cryst(double x) {
-      double mean;
+      double average;
       double a;
       double b;
       double A;
       double B;
-      double N;
       double C;
       double D;
+      double N;
 
+      auto crstCoeffs = crystCoeff();
+        A = std::get<0>(crstCoeffs);
+        B = std::get<1>(crstCoeffs);
+        C = std::get<2>(crstCoeffs);
+        D = std::get<2>(crstCoeffs);
+        N = std::get<2>(crstCoeffs);
+
+      ///The average of an evenly space distrubtion should be equal to the sum of the start and end / 2
       b = rangeMax();
       a = rangeMin();
 
-      mean = (b-a) / 2
+      average = (b+a) / 2;
 
-    if (((x-mean)/crystStanDev()) <= -crystAlpha()){
-        return (A*pow((B-((x-mean)/crystStanDev())),-crystn()));
+    if (((x-average)/crystStanDev()) <= -crystAlpha()){
+        return (A*pow((B-((x-average)/crystStanDev())),-crystn()));
     } else {
-        return (exp(-((x-mean)*(x-mean))/(2*crystStanDev()*crystStanDev())));
+        return (exp(-((x-average)*(x-average))/(2*crystStanDev()*crystStanDev())));
     }
 };
 
@@ -174,6 +209,113 @@ double FiniteFunction::integral(int Ndiv) { //public
   }
   else return m_Integral; //Don't bother re-calculating integral if Ndiv is the same as the last call
 }
+
+double GaussFunction::integrate(int Ndiv){ //private
+  double delX;
+  double x;
+  double Sum;
+  Sum = 0.0;
+  x = rangeMin();
+  delX = (rangeMax() - rangeMin()) / static_cast<double>(Ndiv);
+  while(x <= rangeMax()){
+    if(x == rangeMin()){
+      Sum += 2.0 * callFunction(x);
+    }
+    else if(x >= rangeMax()){
+      Sum += 2.0 * callFunction(x);
+    }
+    else{
+      Sum += callFunction(x);
+    }
+    x += delX;
+  }
+  return (delX/2) * Sum;  
+}
+
+double GaussFunction::integral(int Ndiv) { //public
+  if (Ndiv <= 0){
+    std::cout << "Invalid number of divisions for integral, setting Ndiv to 1000" <<std::endl;
+    Ndiv = 1000;
+  }
+  if (m_Integral == NULL || Ndiv != m_IntDiv){
+    m_IntDiv = Ndiv;
+    m_Integral = this->integrate(Ndiv);
+    return m_Integral;
+  }
+  else return m_Integral; //Don't bother re-calculating integral if Ndiv is the same as the last call
+}
+
+double CauchyLorentzFunction::integrate(int Ndiv){ //private
+  double delX;
+  double x;
+  double Sum;
+  Sum = 0.0;
+  x = rangeMin();
+  delX = (rangeMax() - rangeMin()) / static_cast<double>(Ndiv);
+  while(x <= rangeMax()){
+    if(x == rangeMin()){
+      Sum += 2.0 * callFunction(x);
+    }
+    else if(x >= rangeMax()){
+      Sum += 2.0 * callFunction(x);
+    }
+    else{
+      Sum += callFunction(x);
+    }
+    x += delX;
+  }
+  return (delX/2) * Sum;  
+}
+
+double CauchyLorentzFunction::integral(int Ndiv) { //public
+  if (Ndiv <= 0){
+    std::cout << "Invalid number of divisions for integral, setting Ndiv to 1000" <<std::endl;
+    Ndiv = 1000;
+  }
+  if (m_Integral == NULL || Ndiv != m_IntDiv){
+    m_IntDiv = Ndiv;
+    m_Integral = this->integrate(Ndiv);
+    return m_Integral;
+  }
+  else return m_Integral; //Don't bother re-calculating integral if Ndiv is the same as the last call
+}
+
+double CrystalBallFunction::integrate(int Ndiv){ //private
+  double delX;
+  double x;
+  double Sum;
+  Sum = 0.0;
+  x = rangeMin();
+  delX = (rangeMax() - rangeMin()) / static_cast<double>(Ndiv);
+  while(x <= rangeMax()){
+    if(x == rangeMin()){
+      Sum += 2.0 * callFunction(x);
+    }
+    else if(x >= rangeMax()){
+      Sum += 2.0 * callFunction(x);
+    }
+    else{
+      Sum += callFunction(x);
+    }
+    x += delX;
+  }
+  return (delX/2) * Sum;  
+}
+
+double CrystalBallFunction::integral(int Ndiv) { //public
+  if (Ndiv <= 0){
+    std::cout << "Invalid number of divisions for integral, setting Ndiv to 1000" <<std::endl;
+    Ndiv = 1000;
+  }
+  if (m_Integral == NULL || Ndiv != m_IntDiv){
+    m_IntDiv = Ndiv;
+    m_Integral = this->integrate(Ndiv);
+    return m_Integral;
+  }
+  else return m_Integral; //Don't bother re-calculating integral if Ndiv is the same as the last call
+}
+
+
 
 /*
 ###################
@@ -245,6 +387,27 @@ void FiniteFunction::printInfo(){
   std::cout << "function: " << m_FunctionName << std::endl;
 }
 
+void GaussFunction::printInfo(){
+  std::cout << "rangeMin: " << m_RMin << std::endl;
+  std::cout << "rangeMax: " << m_RMax << std::endl;
+  std::cout << "integral: " << m_Integral << ", calculated using " << m_IntDiv << " divisions" << std::endl;
+  std::cout << "function: " << m_FunctionName << std::endl;
+}
+
+void CauchyLorentzFunction::printInfo(){
+  std::cout << "rangeMin: " << m_RMin << std::endl;
+  std::cout << "rangeMax: " << m_RMax << std::endl;
+  std::cout << "integral: " << m_Integral << ", calculated using " << m_IntDiv << " divisions" << std::endl;
+  std::cout << "function: " << m_FunctionName << std::endl;
+}
+
+void CrystalBallFunction::printInfo(){
+  std::cout << "rangeMin: " << m_RMin << std::endl;
+  std::cout << "rangeMax: " << m_RMax << std::endl;
+  std::cout << "integral: " << m_Integral << ", calculated using " << m_IntDiv << " divisions" << std::endl;
+  std::cout << "function: " << m_FunctionName << std::endl;
+}
+
 /*
 ###################
 //Plotting
@@ -308,7 +471,7 @@ std::vector< std::pair<double,double> > FiniteFunction::makeHist(std::vector<dou
   for (double point : points){
     //Get bin index (starting from 0) the point falls into using point value, range, and Nbins
     int bindex = static_cast<int>(floor((point-m_RMin)/((m_RMax-m_RMin)/(double)Nbins)));
-    if (bindex<0 || bindex>Nbins){
+    if (bindex<0 || bindex>Nbins-1){
       continue;
     }
     bins[bindex]++; //weight of 1 for each data point

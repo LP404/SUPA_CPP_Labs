@@ -9,6 +9,7 @@ int main(){
 
     FiniteFunction func(-5,5,"Output");
     func.plotFunction();
+    func.plotData(importVals,100);
 
 
     return 0;
