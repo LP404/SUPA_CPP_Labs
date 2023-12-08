@@ -62,32 +62,20 @@ class Ex34Functions : public FiniteFunction{
         double CauchyLorentz(double x);                
         double CrystalBall(double x); 
 
-        double gdistMu(); //Low end of the range the function is defined within
-        double gdistStandardDev(); //High end of the range the function is defined within
-        double CoLoX0(); //Low end of the range the function is defined within
-        double CoLoGamma(); //High end of the range the function is defined within
-        double crystAlpha(); //Low end of the range the function is defined within
-        double crystn(); //High end of the range the function is defined within
-        double crystStanDev(); //High end of the range the function is defined within
-        std::tuple<double, double, double, double, double> crystCoeff();              
-        
-        
-        void setMu(double Rmu);
-        void setStandardDev(double Rstd);
-        void setX0(double Rx0);
-        void setGamma(double Rgamma);
-        void SetCrystAlpha(double Ralpha); //Low end of the range the function is defined within
-        void SetCrystn(double Rn); //High end of the range the function is defined within
-        void SetCrystStanDev(double RstDev); //High end of the range the function is defined within
-        void SetCoefs(double Ralpha, double Rn, double RstDev);
+        void SetGaussParams(double Rmu,double Rstd);
+        void SetCauchLorParams(double Rx0,double Rgamma);
+        void SetCrystalParams(double Ralpha,double Rn, double Rstd);
 
         int selectDist;
 
-
-
-
-
     private:
+
+        std::tuple<double, double> GaussParams();
+        std::tuple<double, double> CauchLorParams();
+        std::tuple<double, double, double> CrystalParams();
+        std::tuple<double, double, double, double, double> crystCoeff();              
+        
+        void SetCoefs(double Ralpha, double Rn, double RstDev);
 
         double m_Mu;
         double m_StdDev;
