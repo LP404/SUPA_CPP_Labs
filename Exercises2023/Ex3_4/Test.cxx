@@ -16,12 +16,13 @@ int main(){
     FiniteFunction func(*m_RMin,*m_RMax,"Output");
     func.plotFunction();
     func.plotData(importVals,100);
+    func.printInfo();
 
     GaussFunction gfunc(*m_RMin,*m_RMax,0,1,"Output_Gauss");
     gfunc.plotFunction();
     gfunc.plotData(importVals,100);
 
-    CauchyLorentzFunction cfunc(*m_RMin,*m_RMax,0,2,"Output_CL");
+    CauchyLorentzFunction cfunc(*m_RMin,*m_RMax,0,1,"Output_CL");
     cfunc.plotFunction();
     cfunc.plotData(importVals,100);
 
