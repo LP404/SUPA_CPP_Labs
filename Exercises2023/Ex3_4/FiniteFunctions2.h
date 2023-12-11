@@ -54,11 +54,13 @@ private:
 class Ex34Functions : public FiniteFunction{
     public:
         
+        std::vector<double> ReadFunc(std::string fName); 
+
         Ex34Functions(); //Empty constructor
         Ex34Functions(double range_min, double range_max, std::string outfile); //Variable constructor
         ~Ex34Functions(); //Destructor
         
-        std::vector<double> ReadFunc(std::string fName); 
+        
 
         double callFunction(double x) override;                 
         double Gaussian(double x);           

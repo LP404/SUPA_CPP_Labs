@@ -63,7 +63,7 @@ Ex34Functions::~Ex34Functions(){
 
 
 
-std::vector<double> ReadFunc(std::string fName){
+std::vector<double> Ex34Functions::ReadFunc(std::string fName){
 
 ///Opens a file, ready for reading in data
 std::ifstream myInput(fName);
@@ -323,7 +323,7 @@ std::vector< std::pair<double,double> > FiniteFunction::makeHist(std::vector<dou
   for (double point : points){
     //Get bin index (starting from 0) the point falls into using point value, range, and Nbins
     int bindex = static_cast<int>(floor((point-m_RMin)/((m_RMax-m_RMin)/(double)Nbins)));
-    if (bindex<0 || bindex>Nbins){
+    if (bindex<0 || bindex>Nbins-1){
       continue;
     }
     bins[bindex]++; //weight of 1 for each data point
