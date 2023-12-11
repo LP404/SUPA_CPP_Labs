@@ -60,7 +60,7 @@ class Ex34Functions : public FiniteFunction{
         Ex34Functions(double range_min, double range_max, std::string outfile); //Variable constructor
         ~Ex34Functions(); //Destructor
         
-        
+        int selectDist;
 
         double callFunction(double x) override;                 
         double Gaussian(double x);           
@@ -75,7 +75,11 @@ class Ex34Functions : public FiniteFunction{
 
         void printInfo() override;
 
-        int selectDist;
+        double Metropolis(double xOld, double Met_mu, double Met_stdDev);
+
+        std::vector<double> VectorMaker(int N);
+
+        
 
     private:
 
@@ -107,5 +111,8 @@ class Ex34Functions : public FiniteFunction{
         double m_C;
         double m_D;
         double m_N;
+        double Met_mu;
+        double Met_stdDev;
+
 
 };

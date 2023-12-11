@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <random>
 #include <numeric>
 #include "FiniteFunctions2.h"
 #include <filesystem> //To check extensions in a nice way
@@ -292,6 +293,60 @@ void FiniteFunction::plotData(std::vector<double> &points, int Nbins, bool isdat
     m_plotsamplepoints = true;
   }
 }
+
+std::vector<double> VectorMaker(int N, double range_min, double range_max){
+
+std::vector<double> vect(N);
+double count;
+double step;
+count = range_min;
+step = (range_max - range_min) / static_cast<double>((N-1));
+
+for(int i = 0; i < N; ++i){
+   vect[i] = count;
+   count += step;
+}
+
+return vect;
+};
+
+
+
+
+double Ex34Functions::Metropolis(double xOld, double mu, double stdDev){
+
+    double xAdged = xOld;
+    double xTrial;
+    double Num;
+    double Den;
+    double w;
+    
+    unsigned int seed = 19967
+    std::mt19937 Thomas(seed);
+    
+    std::uniform_real_distribution<double> uniformPDF(0.0,1.0);
+    std::normal_distribution<double> normalPDF(mu,stdDev);
+
+    xTrial = xAdged + normalPDF(Thomas);
+
+    Num = this->callFunction(xTrial);
+    Den = this->callFunction(xAdged);
+
+    w = Num/Den;
+
+    if (w >= 1) {
+        return xTrial;
+    } else {
+        if ( uniformPDF(Thomas) <= w) {
+            return xTrial;}
+        else {
+            return xAdged;}
+    }
+
+
+};
+
+
 
 
 /*
