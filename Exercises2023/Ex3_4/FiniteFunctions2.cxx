@@ -407,6 +407,8 @@ if (x*x + y*y <= radius*radius){
 ///This will get better for more points selected, this Pi isn't perfect.
 Pi = 4.0 * circleCount / static_cast<double>(n_random);
 
+
+///Prints the data to the terminal
 std::cout << circleCount << "\n";
 std::cout << totalCount << "\n";
 std::cout << "Pi has been calcualted to be "<<std::setprecision(10) <<Pi << " to 10 d.p."<<"\n";
