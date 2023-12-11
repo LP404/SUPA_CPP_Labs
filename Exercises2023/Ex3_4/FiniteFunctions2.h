@@ -79,6 +79,8 @@ class Ex34Functions : public FiniteFunction{
 
         std::vector<double> VectorMaker(int N);
 
+
+
         
 
     private:

@@ -312,41 +312,42 @@ return vect;
 
 
 
-
 double Ex34Functions::Metropolis(double xOld, double mu, double stdDev){
 
-    double xAdged = xOld;
     double xTrial;
     double Num;
     double Den;
     double w;
     
-    unsigned int seed = 19967;
-    std::mt19937 Thomas(seed);
+    //So apparently having a fixed seed of an unsigned int of 22 causes it to plot weird for some reason.
+    //But having a random seed is so 
+    std::random_device The_Tank_Engine;
+    std::mt19937 Thomas(The_Tank_Engine());
     
     std::uniform_real_distribution<double> uniformPDF(0.0,1.0);
     std::normal_distribution<double> normalPDF(mu,stdDev);
 
-    xTrial = xAdged + normalPDF(Thomas);
+    xTrial = xOld + normalPDF(Thomas);
 
     Num = this->callFunction(xTrial);
-    Den = this->callFunction(xAdged);
+    Den = this->callFunction(xOld);
+    
 
     w = Num/Den;
 
-    if (w <= 1) {
+    
+
+    if (w >= 1) {
         return xTrial;
     } else {
         if ( uniformPDF(Thomas) <= w) {
             return xTrial;}
         else {
-            return xAdged;}
+            return xOld;}
     }
 
 
-};
-
-
+}
 
 
 /*
