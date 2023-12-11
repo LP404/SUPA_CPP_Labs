@@ -47,6 +47,32 @@ int main(){
     crfunc.plotData(importVals,100);
     crfunc.printInfo();
 
+    std::vector<double> GaussMet;
+    std::vector<double> CauchLorMet;
+    std::vector<double> CrystalMet;
+    int samSize = 100000;
+
+    GaussMet = gfunc.VectorMaker(samSize);
+    CauchLorMet = cfunc.VectorMaker(samSize);
+    CrystalMet = crfunc.VectorMaker(samSize);
+
+    for (int i=0; i<samSize; i++) {
+        GaussMet[i] = gfunc.callFunction(GaussMet[i]);
+        CauchLorMet[i] = cfunc.callFunction(CauchLorMet[i]);
+        CrystalMet[i] = crfunc.callFunction(CrystalMet[i]);
+    }
+
+
+    for (int i=0; i<samSize; i++) {
+        GaussMet[i+1] = gfunc.Metropolis(GaussMet[i],0,13);
+        CauchLorMet[i+1] = cfunc.Metropolis(CauchLorMet[i],0,13);
+        CrystalMet[i+1] = crfunc.Metropolis(CrystalMet[i],0,13);
+    }
+
+    gfunc.plotData(GaussMet,100,false);
+    cfunc.plotData(CauchLorMet,100,false);
+    crfunc.plotData(CrystalMet,100,false);
+
 
     return 0;
 }

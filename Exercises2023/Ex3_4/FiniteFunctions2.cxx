@@ -294,16 +294,17 @@ void FiniteFunction::plotData(std::vector<double> &points, int Nbins, bool isdat
   }
 }
 
-std::vector<double> VectorMaker(int N, double range_min, double range_max){
+std::vector<double> Ex34Functions::VectorMaker(int N){
 
 std::vector<double> vect(N);
 double count;
 double step;
-count = range_min;
-step = (range_max - range_min) / static_cast<double>((N-1));
+count = m_RMin;
+step = (m_RMax - m_RMin) / static_cast<double>((N-1));
 
 for(int i = 0; i < N; ++i){
    vect[i] = count;
+   std::cout << vect[i] << "\n";
    count += step;
 }
 
@@ -321,7 +322,7 @@ double Ex34Functions::Metropolis(double xOld, double mu, double stdDev){
     double Den;
     double w;
     
-    unsigned int seed = 19967
+    unsigned int seed = 19967;
     std::mt19937 Thomas(seed);
     
     std::uniform_real_distribution<double> uniformPDF(0.0,1.0);
