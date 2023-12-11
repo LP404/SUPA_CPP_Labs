@@ -16,10 +16,6 @@ int main(){
     std::vector<double>::iterator m_RMin = std::min_element(importVals.begin(), importVals.end());
     std::vector<double>::iterator m_RMax = std::max_element(importVals.begin(), importVals.end());
 
-    double Average;
-
-    
-
     FiniteFunction func(*m_RMin,*m_RMax,"Output");
     func.plotFunction();
     func.plotData(importVals,100);
@@ -39,6 +35,9 @@ int main(){
     cfunc.plotData(importVals,100);
     cfunc.printInfo();
 
+    //I was having problems with calcualting the average so that is done outside the functions file and fed into it
+    double Average;
+
     Ex34Functions crfunc(*m_RMin,*m_RMax,"Output_Crystal");
     crfunc.selectDist = 2;
     Average = std::reduce(importVals.begin(), importVals.end(), 0.0) / importVals.size();
@@ -51,22 +50,18 @@ int main(){
     std::vector<double> GaussMet;
     std::vector<double> CauchLorMet;
     std::vector<double> CrystalMet;
+    
     int samSize = 100000;
 
     GaussMet = gfunc.VectorMaker(samSize);
     CauchLorMet = cfunc.VectorMaker(samSize);
     CrystalMet = crfunc.VectorMaker(samSize);
 
-
-///I've checked this part of the code and the values it outputs appear to be in line with the other data, but it plots weird
-//It does not generate a value over 0.4X, but it appears to plot a value that is at least 3
-
     for (int i=0; i<samSize; i++) {
         GaussMet[i] = gfunc.callFunction(GaussMet[i]);
         CauchLorMet[i] = cfunc.callFunction(CauchLorMet[i]);
         CrystalMet[i] = crfunc.callFunction(CrystalMet[i]);
     }
-
 
    for (int i=0; i<samSize; i++) {
         GaussMet[i+1] = gfunc.Metropolis(GaussMet[i],0,0.25);
@@ -80,7 +75,7 @@ int main(){
 
     //Bonus task was completed but has been left commented out as it increases runtime by alot
     //Ex34Functions piFunc ;
-    //piFunc.PiFinder(1.0,1000000000);
+    //piFunc.PiFinder(1.0,100000);
 
     return 0;
 }

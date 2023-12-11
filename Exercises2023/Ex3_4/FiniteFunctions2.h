@@ -63,9 +63,6 @@ class Ex34Functions : public FiniteFunction{
         int selectDist;
 
         double callFunction(double x) override;                 
-        double Gaussian(double x);           
-        double CauchyLorentz(double x);                
-        double CrystalBall(double x); 
 
         void SetGaussParams(double Rmu,double Rstd);
         void SetCauchLorParams(double Rx0,double Rgamma);
@@ -85,6 +82,10 @@ class Ex34Functions : public FiniteFunction{
 
     private:
 
+        double Gaussian(double x);           
+        double CauchyLorentz(double x);                
+        double CrystalBall(double x); 
+
         double gdistMu();
         double gdistStandardDev();
 
@@ -98,7 +99,7 @@ class Ex34Functions : public FiniteFunction{
 
         void SetCoefs(double Ralpha, double Rn, double RstDev);
 
-        std::tuple<double, double, double, double, double> crystCoeff();              
+        std::tuple<double, double, double> crystCoeff();              
         
         double m_Mu;
         double m_StdDev;

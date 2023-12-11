@@ -1,6 +1,8 @@
 ///I was talking to another student and they suggested that I combine all the custom functions into one class and add a flag to tell it what to run
-///Why didn't I think of that?
+///Why didn't I think of that? I makes everything so much cleaner (sort of)
 
+//Import relevent lbaries. However from what I understand if I use <iostream> I don't need <iomanip>/<ios>;
+//but if they're not imported the final negatvie Crystal Ball plot breaks and I don't know why. 
 #include <iostream>
 #include <iomanip>
 #include <ios>
@@ -30,6 +32,7 @@ FiniteFunction::FiniteFunction(double range_min, double range_max, std::string o
   m_Integral = NULL;
   this->checkPath(outfile); //Use provided string to name output files
 };
+
 //Plots are called in the destructor
 //SUPACPP note: They syntax of the plotting code is not part of the course
 FiniteFunction::~FiniteFunction(){
@@ -37,7 +40,7 @@ FiniteFunction::~FiniteFunction(){
   this->generatePlot(gp); //Generate the plot and save it to a png using "outfile" for naming 
 };
 
-
+//Empty constructor for custom functions
 Ex34Functions::Ex34Functions(){
   m_RMin = -5.0;
   m_RMax = 5.0;
@@ -45,6 +48,7 @@ Ex34Functions::Ex34Functions(){
   m_Integral = NULL;
 };
 
+//initialised constructor for custom functions
 Ex34Functions::Ex34Functions(double range_min, double range_max, std::string outfile){
   m_RMin = range_min;
   m_RMax = range_max;
@@ -52,6 +56,7 @@ Ex34Functions::Ex34Functions(double range_min, double range_max, std::string out
   this->checkPath(outfile); //Use provided string to name output files
 }
 
+//It's the destructor for the custom functions
 Ex34Functions::~Ex34Functions(){
   Gnuplot gp; //Set up gnuplot object
   this->generatePlot(gp); //Generate the plot and save it to a png using "outfile" for naming 
@@ -64,7 +69,8 @@ Ex34Functions::~Ex34Functions(){
 ###################
 */ 
 
-
+//Simple data read in function that I reused from the previous assignment with a small tweak.
+//It only imports one column in now
 
 std::vector<double> Ex34Functions::ReadFunc(std::string fName){
 
@@ -109,6 +115,10 @@ void FiniteFunction::setRangeMax(double RMax) {m_RMax = RMax;};
 void FiniteFunction::setOutfile(std::string Outfile) {this->checkPath(Outfile);};
 
 
+//I don't feel like I have to go super indepth here as to what these do.
+//They set variables so that they can be called in other places throughout the script
+//I decided to group them by function as it would be easier to understand
+
 void Ex34Functions::SetGaussParams(double Rmu,double Rstd){
 m_Mu = Rmu;
 m_StdDev = Rstd;
@@ -125,7 +135,11 @@ m_stanDev = RstDev;
 };
 
 
+//The exception being the average as I calculated it seperatly as I was having trouble with it
+
 void Ex34Functions::SetCrystalAverage(double Ravg){m_Average = Ravg;};
+
+//Calculates the paramaters for the negative Crystal Ball function
 
 void Ex34Functions::SetCoefs(double Ralpha, double Rn, double RstDev){
 
@@ -141,6 +155,10 @@ m_N = 1/(RstDev*(m_C+m_D));
 //Getters
 ###################
 */ 
+
+//All of these allow the variables to be called with a function.
+//I kept them seperate as it was easier
+
 double FiniteFunction::rangeMin() {return m_RMin;};
 double FiniteFunction::rangeMax() {return m_RMax;};
 
@@ -156,8 +174,10 @@ double Ex34Functions::crystn() {return m_n;};
 double Ex34Functions::crystStanDev() {return m_stanDev;};
 double Ex34Functions::crystalAverage(){return m_Average;};
 
-std::tuple<double, double, double, double, double> Ex34Functions::crystCoeff() {
-  return std::tuple<double, double, double, double, double>{m_A, m_B, m_C, m_D, m_N};};
+/// I put these in a tuple because... it felt right? Honestly I made this after the others and I just put them all together
+
+std::tuple<double, double, double> Ex34Functions::crystCoeff() {
+  return std::tuple<double, double, double>{m_A, m_B, m_N};};
 
 
 /*
@@ -165,11 +185,15 @@ std::tuple<double, double, double, double, double> Ex34Functions::crystCoeff() {
 //Function eval
 ###################
 */ 
+
+//We have two functions per distribution. The first performs the numerical solution for the distribution at x
+//The second will allow us to call said function with an overridable function. So we can make things nice and tidy
+
 double FiniteFunction::invxsquared(double x) {return 1/(1+x*x);};
 double FiniteFunction::callFunction(double x) {return this->invxsquared(x);}; //(overridable)
 
 double Ex34Functions::Gaussian(double x) {
-return (1.0/(gdistStandardDev()*(sqrt(2*M_PI))))*exp((-1.0/2.0)*(((x-gdistMu())/gdistStandardDev())*((x-gdistMu())/gdistStandardDev())));  
+return (1.0/(gdistStandardDev()*(sqrt(2.0*M_PI))))*exp((-1.0/2.0)*(((x-gdistMu())/gdistStandardDev())*((x-gdistMu())/gdistStandardDev())));  
 };
 
 double Ex34Functions::CauchyLorentz(double x) {
@@ -178,30 +202,26 @@ double Ex34Functions::CauchyLorentz(double x) {
 
 //This is probably very inefficent
 double Ex34Functions::CrystalBall(double x) {
-      double a;
-      double b;
       double A;
       double B;
-      double C;
-      double D;
       double N;
 
+      ///Assigns values to variables out of the tuple
       auto crstCoeffs = crystCoeff();
         A = std::get<0>(crstCoeffs);
         B = std::get<1>(crstCoeffs);
-        C = std::get<2>(crstCoeffs);
-        D = std::get<2>(crstCoeffs);
         N = std::get<2>(crstCoeffs);
 
-      ///The average of an evenly space distrubtion should be equal to the sum of the start and end / 2
-
     if (((x-crystalAverage())/crystStanDev()) <= -crystAlpha()){
-        return (A*pow((B-((x-crystalAverage())/crystStanDev())),-crystn()));
+        return (N*(A*pow((B-((x-crystalAverage())/crystStanDev())),-crystn())));
     } else {
-        return (exp(-((x-crystalAverage())*(x-crystalAverage()))/(2*crystStanDev()*crystStanDev())));
+        return (N*(exp(-((x-crystalAverage())*(x-crystalAverage()))/(2*crystStanDev()*crystStanDev()))));
     }
 };
 
+
+///Based on what the inital input is for selectDist, it will select which function to call for callFunction
+///A little cleaner/more elegent than the previous verison (see Deppreciated)
 double Ex34Functions::callFunction(double x) {
     if (selectDist == 0) {
         return this->Gaussian(x);}
@@ -220,6 +240,10 @@ double Ex34Functions::callFunction(double x) {
 Integration by hand (output needed to normalise function when plotting)
 ###################
 */ 
+
+//Very simple integrater, will sum up function for all values of x that need to be considered
+///Attempted something that uses Simpsions rule, didn't work out (see Depreciated)
+
 double FiniteFunction::integrate(int Ndiv){ //private
   //Integration Steps
   double Sol = 0;
@@ -229,6 +253,8 @@ double FiniteFunction::integrate(int Ndiv){ //private
   }
   return Sol;  
 }
+
+
 double FiniteFunction::integral(int Ndiv) { //public
   if (Ndiv <= 0){
     std::cout << "Invalid number of divisions for integral, setting Ndiv to 1000" <<std::endl;
@@ -270,6 +296,125 @@ void Ex34Functions::printInfo(){
   std::cout << "function: " << m_FunctionName << std::endl;
 }
 
+///Will produce a linerly spaced vector in the range where the distribution exists, needed for the metropolis alorithim
+///Makes an empty vector of size N (integer input)
+///Figures out what the step size should be
+///Starts at the min value and at each array location, will insert current value which is equal to start value + sum (i-1) steps [if that makes sense]
+///Returns a usable vector
+std::vector<double> Ex34Functions::VectorMaker(int N){
+
+std::vector<double> vect(N);
+double count;
+double step;
+count = m_RMin;
+step = (m_RMax - m_RMin) / static_cast<double>((N-1));
+
+for(int i = 0; i < N; ++i){
+   vect[i] = count;
+   count += step;
+}
+
+return vect;
+};
+
+///The metropoilis alorightim
+///Just a computatioal way of expression what was on the excersie sheet
+
+double Ex34Functions::Metropolis(double xOld, double mu, double stdDev){
+
+  ///Takes in a x value, mu and std, decleares new variables. 
+
+    double xTrial;
+    double Num;
+    double Den;
+    double w;
+    
+    ///Random number generator is defined.
+    ///Uses a "non-deterministic random number" for the seed. I think it uses the system time.
+    ///This was one of the last bugfixes I did, I gave the variable a funny name
+
+    //So apparently having a fixed seed of an unsigned int of 22 causes it to plot weird for some reason.
+    //But having a random seed is fine
+    //If it plots weird, just try again.
+    std::random_device The_Tank_Engine;
+    std::mt19937 Thomas(The_Tank_Engine());
+    
+
+    ///Defines our distributions both uniform and normal
+    std::uniform_real_distribution<double> uniformPDF(0.0,1.0);
+    std::normal_distribution<double> normalPDF(mu,stdDev);
+
+    ///Calcualtes a trial value
+    xTrial = xOld + normalPDF(Thomas);
+
+    ///Sticks them into the function
+    Num = this->callFunction(xTrial);
+    Den = this->callFunction(xOld);
+    
+    ///Compares the ratio of the output
+    w = Num/Den;
+
+    
+    ///Determines if to accept it or keep the old value
+    if (w >= 1) {
+        return xTrial;
+    } else {
+        if ( uniformPDF(Thomas) <= w) {
+            return xTrial;}
+        else {
+            return xOld;}
+    }
+
+
+};
+
+
+///Compares a square to a circle
+void Ex34Functions::PiFinder(double radius, int n_random){
+
+///Define all required variables
+double x;
+double y;
+double circleCount = 0;
+double totalCount = 0;
+double Pi;
+double Known_Pi = M_PI;
+
+    ///Reuse the random number generater from earlier
+    std::random_device The_Tank_Engine;
+    std::mt19937 Thomas(The_Tank_Engine());
+    
+    ///Uniform distribution as we want an equal chance to be anywhere in our square
+    std::uniform_real_distribution<double> uniformPDF(-radius,radius);
+
+
+///Generates theoreical coordinate points inside our square
+for(int i = 0; i <= n_random; ++i){
+
+x = uniformPDF(Thomas);
+y = uniformPDF(Thomas);
+
+///Checks if they could fall within the largest circle that will fit in our sqaure
+///If it does then it's added to to rolling counter
+///If not then it's discarded
+if (x*x + y*y <= radius*radius){
+  circleCount += 1.0;
+}
+}
+
+
+///Pi should be equal to the ratio of points inside the circle over all points, multiplied by four
+///This will get better for more points selected, this Pi isn't perfect.
+Pi = 4.0 * circleCount / static_cast<double>(n_random);
+
+std::cout << circleCount << "\n";
+std::cout << totalCount << "\n";
+std::cout << "Pi has been calcualted to be "<<std::setprecision(10) <<Pi << " to 10 d.p."<<"\n";
+std::cout << "The script is incorrected by a value of " << std::abs(M_PI - Pi);
+};
+
+///I haven't touched anything below this line, aside form the bugfixes
+
 
 /*
 ###################
@@ -295,99 +440,6 @@ void FiniteFunction::plotData(std::vector<double> &points, int Nbins, bool isdat
     m_plotsamplepoints = true;
   }
 }
-
-std::vector<double> Ex34Functions::VectorMaker(int N){
-
-std::vector<double> vect(N);
-double count;
-double step;
-count = m_RMin;
-step = (m_RMax - m_RMin) / static_cast<double>((N-1));
-
-for(int i = 0; i < N; ++i){
-   vect[i] = count;
-   count += step;
-}
-
-return vect;
-};
-
-
-
-double Ex34Functions::Metropolis(double xOld, double mu, double stdDev){
-
-    double xTrial;
-    double Num;
-    double Den;
-    double w;
-    
-    //So apparently having a fixed seed of an unsigned int of 22 causes it to plot weird for some reason.
-    //But having a random seed is fine
-    //If it plots weird, just try again.
-    std::random_device The_Tank_Engine;
-    std::mt19937 Thomas(The_Tank_Engine());
-    
-    std::uniform_real_distribution<double> uniformPDF(0.0,1.0);
-    std::normal_distribution<double> normalPDF(mu,stdDev);
-
-    xTrial = xOld + normalPDF(Thomas);
-
-    Num = this->callFunction(xTrial);
-    Den = this->callFunction(xOld);
-    
-
-    w = Num/Den;
-
-    
-
-    if (w >= 1) {
-        return xTrial;
-    } else {
-        if ( uniformPDF(Thomas) <= w) {
-            return xTrial;}
-        else {
-            return xOld;}
-    }
-
-
-}
-
-
-void Ex34Functions::PiFinder(double radius, int n_random){
-
-double x;
-double y;
-double circleCount = 0;
-double totalCount = 0;
-double Pi;
-double Known_Pi = M_PI;
-
-    std::random_device The_Tank_Engine;
-    std::mt19937 Thomas(The_Tank_Engine());
-    
-    std::uniform_real_distribution<double> uniformPDF(-radius,radius);
-
-    
-for(int i = 0; i <= n_random; ++i){
-
-x = uniformPDF(Thomas);
-y = uniformPDF(Thomas);
-
-if (x*x + y*y <= radius*radius){
-  circleCount += 1.0;
-}
-totalCount +=1.0;
-}
-
-
-Pi = 4.0 * circleCount / totalCount;
-
-std::cout << circleCount << "\n";
-std::cout << totalCount << "\n";
-std::cout << "Pi has been calcualted to be "<<std::setprecision(10) <<Pi << " to 10 d.p."<<"\n";
-std::cout << "The script is incorrected by a value of " << std::abs(M_PI - Pi);
-}
-
 
 /*
   #######################################################################################################
