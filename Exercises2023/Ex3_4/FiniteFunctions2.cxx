@@ -260,6 +260,14 @@ void FiniteFunction::printInfo(){
   std::cout << "function: " << m_FunctionName << std::endl;
 }
 
+void Ex34Functions::printInfo(){
+  std::cout << "rangeMin: " << m_RMin << std::endl;
+  std::cout << "rangeMax: " << m_RMax << std::endl;
+  std::cout << "integral: " << m_Integral << ", calculated using " << m_IntDiv << " divisions" << std::endl;
+  std::cout << "function: " << m_FunctionName << std::endl;
+}
+
+
 /*
 ###################
 //Plotting

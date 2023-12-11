@@ -27,15 +27,17 @@ int main(){
 
     Ex34Functions gfunc(*m_RMin,*m_RMax,"Output_Gauss");
     gfunc.selectDist = 0;
-    gfunc.SetGaussParams(0,3);
+    gfunc.SetGaussParams(0,1);
     gfunc.plotFunction();
     gfunc.plotData(importVals,100);
+    gfunc.printInfo();
 
     Ex34Functions cfunc(*m_RMin,*m_RMax,"Output_CL");
     cfunc.selectDist = 1;
-    cfunc.SetCauchLorParams(0,2);
+    cfunc.SetCauchLorParams(0,0.75);
     cfunc.plotFunction();
     cfunc.plotData(importVals,100);
+    cfunc.printInfo();
 
     Ex34Functions crfunc(*m_RMin,*m_RMax,"Output_Crystal");
     crfunc.selectDist = 2;
@@ -43,6 +45,7 @@ int main(){
     crfunc.SetCrystalParams(1,1,1);
     crfunc.plotFunction();
     crfunc.plotData(importVals,100);
+    crfunc.printInfo();
 
 
     return 0;

@@ -13,7 +13,7 @@ ${TARGET}:${OBJECTS} #Make target from objects
 Test.o : Test.cxx FiniteFunctions2.h
 	${CC} ${FLAGS} ${LIBS} -c Test.cxx
 
-FiniteFunctions.o : FiniteFunctions2.cxx FiniteFunctions2.h
+FiniteFunctions2.o : FiniteFunctions2.cxx FiniteFunctions2.h
 	${CC} ${FLAGS} ${LIBS} -c FiniteFunctions2.cxx
 
 clean: #No targets just run shell command to rm object files and emacs backups

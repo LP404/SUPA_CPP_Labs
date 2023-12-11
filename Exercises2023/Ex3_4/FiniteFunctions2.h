@@ -73,6 +73,8 @@ class Ex34Functions : public FiniteFunction{
 
         void SetCrystalAverage(double Ravg);
 
+        void printInfo() override;
+
         int selectDist;
 
     private:
