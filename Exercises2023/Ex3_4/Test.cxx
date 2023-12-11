@@ -6,7 +6,7 @@
 
 ///Put numeric everywhere to try and get rid of an error
 ///The negative Crystal ball function only plots right roughly half of the time and I don't know why. If I had more time I'd look into it properly
-///Just run it again if it doesn't plot right
+///Just run make then ./Test again if it doesn't plot right
 
 //Update - Something is clearly wrong the negatvie Crystal Ball but I have run out of time to fix it. 
 
