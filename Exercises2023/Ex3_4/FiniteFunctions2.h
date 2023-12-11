@@ -50,42 +50,55 @@ private:
 };
 
 
+///One singular child function that houses all distributions (see Deppreciated for what things use to be)
 
 class Ex34Functions : public FiniteFunction{
     public:
         
+        ///Allows us to read in the data
         std::vector<double> ReadFunc(std::string fName); 
 
         Ex34Functions(); //Empty constructor
         Ex34Functions(double range_min, double range_max, std::string outfile); //Variable constructor
         ~Ex34Functions(); //Destructor
         
+        ///This will allow us to select which distrbution we want
         int selectDist;
 
+        ///This will call a differnt function depending on what the above variable is set to
         double callFunction(double x) override;                 
 
+        ///Allows the user to set variable paramaters for 
         void SetGaussParams(double Rmu,double Rstd);
         void SetCauchLorParams(double Rx0,double Rgamma);
         void SetCrystalParams(double Ralpha,double Rn, double Rstd);
-
+        
+        ///Allows us to pass in the calculated average for the negative crystal ball distribution
         void SetCrystalAverage(double Ravg);
 
+        ///Same as above
         void printInfo() override;
 
+        /// Allows us to call the metropolis algorithim
         double Metropolis(double xOld, double Met_mu, double Met_stdDev);
 
+        /// Allows us to call the linear spaced vector for range of max/min of the distribuions
         std::vector<double> VectorMaker(int N);
 
+        ///The optional Pi finder
         void PiFinder(double radius, int n_random);
 
         
 
     private:
 
+        ///Our functions that acutally perform the calculation for an x value
+        ///Do not let the user near this
         double Gaussian(double x);           
         double CauchyLorentz(double x);                
         double CrystalBall(double x); 
 
+        ///Allows us to call the variables in the cxx
         double gdistMu();
         double gdistStandardDev();
 
@@ -97,10 +110,12 @@ class Ex34Functions : public FiniteFunction{
         double crystStanDev();
         double crystalAverage();
 
+        ///I don't want the user to acutally set A,B,C,D,N coeffiecnts, just the a,b, and std
+        ///So that's why it's here
         void SetCoefs(double Ralpha, double Rn, double RstDev);
-
         std::tuple<double, double, double> crystCoeff();              
         
+        ///Create all the variables we will need
         double m_Mu;
         double m_StdDev;
         double m_x0;
