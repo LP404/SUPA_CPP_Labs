@@ -8,6 +8,8 @@
 ///The negative Crystal ball function only plots right roughly half of the time and I don't know why. If I had more time I'd look into it properly
 ///Just run it again if it doesn't plot right
 
+//Update - Something is clearly wrong the negatvie Crystal Ball but I have run out of time to fix it. 
+
 ///It was found that a Cauchy-Lorentz Distribution with a gamma of 0.75 and a x0 of 0, was the correct one for the data.
 
 int main(){

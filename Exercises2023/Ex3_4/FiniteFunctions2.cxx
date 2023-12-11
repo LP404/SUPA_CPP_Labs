@@ -3,6 +3,7 @@
 
 //Import relevent lbaries. However from what I understand if I use <iostream> I don't need <iomanip>/<ios>;
 //but if they're not imported the final negatvie Crystal Ball plot breaks and I don't know why. 
+
 #include <iostream>
 #include <iomanip>
 #include <ios>
