@@ -304,7 +304,6 @@ step = (m_RMax - m_RMin) / static_cast<double>((N-1));
 
 for(int i = 0; i < N; ++i){
    vect[i] = count;
-   std::cout << vect[i] << "\n";
    count += step;
 }
 
@@ -335,7 +334,7 @@ double Ex34Functions::Metropolis(double xOld, double mu, double stdDev){
 
     w = Num/Den;
 
-    if (w >= 1) {
+    if (w <= 1) {
         return xTrial;
     } else {
         if ( uniformPDF(Thomas) <= w) {

@@ -58,15 +58,16 @@ int main(){
 
     for (int i=0; i<samSize; i++) {
         GaussMet[i] = gfunc.callFunction(GaussMet[i]);
+        std::cout << GaussMet[i] << "\n";
         CauchLorMet[i] = cfunc.callFunction(CauchLorMet[i]);
         CrystalMet[i] = crfunc.callFunction(CrystalMet[i]);
     }
 
 
     for (int i=0; i<samSize; i++) {
-        GaussMet[i+1] = gfunc.Metropolis(GaussMet[i],0,13);
-        CauchLorMet[i+1] = cfunc.Metropolis(CauchLorMet[i],0,13);
-        CrystalMet[i+1] = crfunc.Metropolis(CrystalMet[i],0,13);
+        GaussMet[i+1] = gfunc.Metropolis(GaussMet[i],0,0.5);
+        CauchLorMet[i+1] = cfunc.Metropolis(CauchLorMet[i],0,0.5);
+        CrystalMet[i+1] = crfunc.Metropolis(CrystalMet[i],0,0.5);
     }
 
     gfunc.plotData(GaussMet,100,false);
