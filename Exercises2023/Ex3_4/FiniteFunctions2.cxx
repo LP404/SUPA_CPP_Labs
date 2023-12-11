@@ -2,6 +2,8 @@
 ///Why didn't I think of that?
 
 #include <iostream>
+#include <iomanip>
+#include <ios>
 #include <string>
 #include <vector>
 #include <random>
@@ -320,7 +322,8 @@ double Ex34Functions::Metropolis(double xOld, double mu, double stdDev){
     double w;
     
     //So apparently having a fixed seed of an unsigned int of 22 causes it to plot weird for some reason.
-    //But having a random seed is so 
+    //But having a random seed is fine
+    //If it plots weird, just try again.
     std::random_device The_Tank_Engine;
     std::mt19937 Thomas(The_Tank_Engine());
     
@@ -347,6 +350,42 @@ double Ex34Functions::Metropolis(double xOld, double mu, double stdDev){
     }
 
 
+}
+
+
+void Ex34Functions::PiFinder(double radius, int n_random){
+
+double x;
+double y;
+double circleCount = 0;
+double totalCount = 0;
+double Pi;
+double Known_Pi = M_PI;
+
+    std::random_device The_Tank_Engine;
+    std::mt19937 Thomas(The_Tank_Engine());
+    
+    std::uniform_real_distribution<double> uniformPDF(-radius,radius);
+
+    
+for(int i = 0; i <= n_random; ++i){
+
+x = uniformPDF(Thomas);
+y = uniformPDF(Thomas);
+
+if (x*x + y*y <= radius*radius){
+  circleCount += 1.0;
+}
+totalCount +=1.0;
+}
+
+
+Pi = 4.0 * circleCount / totalCount;
+
+std::cout << circleCount << "\n";
+std::cout << totalCount << "\n";
+std::cout << "Pi has been calcualted to be "<<std::setprecision(10) <<Pi << " to 10 d.p."<<"\n";
+std::cout << "The script is incorrected by a value of " << std::abs(M_PI - Pi);
 }
 
 

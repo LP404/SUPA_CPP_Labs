@@ -51,7 +51,7 @@ int main(){
     std::vector<double> GaussMet;
     std::vector<double> CauchLorMet;
     std::vector<double> CrystalMet;
-    int samSize = 1000;
+    int samSize = 100000;
 
     GaussMet = gfunc.VectorMaker(samSize);
     CauchLorMet = cfunc.VectorMaker(samSize);
@@ -69,15 +69,18 @@ int main(){
 
 
    for (int i=0; i<samSize; i++) {
-        GaussMet[i+1] = gfunc.Metropolis(GaussMet[i],0,0.5);
-        CauchLorMet[i+1] = cfunc.Metropolis(CauchLorMet[i],0,0.5);
-        CrystalMet[i+1] = crfunc.Metropolis(CrystalMet[i],0,0.5);
+        GaussMet[i+1] = gfunc.Metropolis(GaussMet[i],0,0.25);
+        CauchLorMet[i+1] = cfunc.Metropolis(CauchLorMet[i],0,0.25);
+        CrystalMet[i+1] = crfunc.Metropolis(CrystalMet[i],0,3);
     }
 
     gfunc.plotData(GaussMet,100,false);
     cfunc.plotData(CauchLorMet,100,false);
     crfunc.plotData(CrystalMet,100,false);
 
+    //Bonus task was completed but has been left commented out as it increases runtime by alot
+    //Ex34Functions piFunc ;
+    //piFunc.PiFinder(1.0,1000000000);
 
     return 0;
 }

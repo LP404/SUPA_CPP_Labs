@@ -79,7 +79,7 @@ class Ex34Functions : public FiniteFunction{
 
         std::vector<double> VectorMaker(int N);
 
-
+        void PiFinder(double radius, int n_random);
 
         
 
@@ -115,6 +115,8 @@ class Ex34Functions : public FiniteFunction{
         double m_N;
         double Met_mu;
         double Met_stdDev;
+        double radius;
+        double n_random;
 
 
 };
