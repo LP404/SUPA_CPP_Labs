@@ -18,15 +18,29 @@ FiniteFunction::FiniteFunction(){
   m_RMax = 5.0;
   this->checkPath("DefaultFunction");
   m_Integral = NULL;
-}
+};
+
+//initialised constructor
+FiniteFunction::FiniteFunction(double range_min, double range_max, std::string outfile){
+  m_RMin = range_min;
+  m_RMax = range_max;
+  m_Integral = NULL;
+  this->checkPath(outfile); //Use provided string to name output files
+};
+//Plots are called in the destructor
+//SUPACPP note: They syntax of the plotting code is not part of the course
+FiniteFunction::~FiniteFunction(){
+  Gnuplot gp; //Set up gnuplot object
+  this->generatePlot(gp); //Generate the plot and save it to a png using "outfile" for naming 
+};
+
 
 Ex34Functions::Ex34Functions(){
-  m_RMin = -5;
-  m_RMax = 5;
-  this->checkPath("DefaultFunction"); //Use provided string to name output files
+  m_RMin = -5.0;
+  m_RMax = 5.0;
+  this->checkPath("DefaultFunction");
   m_Integral = NULL;
-}
-
+};
 
 Ex34Functions::Ex34Functions(double range_min, double range_max, std::string outfile){
   m_RMin = range_min;
@@ -35,20 +49,11 @@ Ex34Functions::Ex34Functions(double range_min, double range_max, std::string out
   this->checkPath(outfile); //Use provided string to name output files
 }
 
-//initialised constructor
-FiniteFunction::FiniteFunction(double range_min, double range_max, std::string outfile){
-  m_RMin = range_min;
-  m_RMax = range_max;
-  m_Integral = NULL;
-  this->checkPath(outfile); //Use provided string to name output files
-}
-
-//Plots are called in the destructor
-//SUPACPP note: They syntax of the plotting code is not part of the course
-FiniteFunction::~FiniteFunction(){
+Ex34Functions::~Ex34Functions(){
   Gnuplot gp; //Set up gnuplot object
   this->generatePlot(gp); //Generate the plot and save it to a png using "outfile" for naming 
-}
+};
+
 
 /*
 ###################

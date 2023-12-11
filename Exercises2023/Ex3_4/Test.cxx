@@ -1,15 +1,17 @@
 #include "FiniteFunctions2.h"
+#include <numeric>
 #include <vector>
 #include <algorithm>
 #include <iostream>
-#include <numeric>
 
+///Put numeric everywhere to try and get rid of an error
 
 
 int main(){
 
     std::vector<double> importVals;
-    importVals = ReadFunc("Outputs/data/MysteryData13120.txt");
+    Ex34Functions rfunc;
+    importVals = rfunc.ReadFunc("Outputs/data/MysteryData13120.txt");
 
     std::vector<double>::iterator m_RMin = std::min_element(importVals.begin(), importVals.end());
     std::vector<double>::iterator m_RMax = std::max_element(importVals.begin(), importVals.end());

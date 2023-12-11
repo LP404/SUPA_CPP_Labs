@@ -1,10 +1,9 @@
 #include <string>
 #include <vector>
+#include <numeric>
 #include "gnuplot-iostream.h"
 
 #pragma once //Replacement for IFNDEF
-
-std::vector<double> ReadFunc(std::string fName);
 
 class FiniteFunction{
 
@@ -54,9 +53,11 @@ private:
 
 class Ex34Functions : public FiniteFunction{
     public:
+        
         Ex34Functions(); //Empty constructor
         Ex34Functions(double range_min, double range_max, std::string outfile); //Variable constructor
         ~Ex34Functions(); //Destructor
+        
         std::vector<double> ReadFunc(std::string fName); 
 
         double callFunction(double x) override;                 
