@@ -4,6 +4,8 @@
 
 #pragma once //Replacement for IFNDEF
 
+std::vector<double> ReadFunc(std::string fName);
+
 class FiniteFunction{
 
 public:
@@ -66,23 +68,34 @@ class Ex34Functions : public FiniteFunction{
         void SetCauchLorParams(double Rx0,double Rgamma);
         void SetCrystalParams(double Ralpha,double Rn, double Rstd);
 
+        void SetCrystalAverage(double Ravg);
+
         int selectDist;
 
     private:
 
-        std::tuple<double, double> GaussParams();
-        std::tuple<double, double> CauchLorParams();
-        std::tuple<double, double, double> CrystalParams();
-        std::tuple<double, double, double, double, double> crystCoeff();              
-        
+        double gdistMu();
+        double gdistStandardDev();
+
+        double CoLoX0();
+        double CoLoGamma();
+
+        double crystAlpha(); 
+        double crystn(); 
+        double crystStanDev();
+        double crystalAverage();
+
         void SetCoefs(double Ralpha, double Rn, double RstDev);
 
+        std::tuple<double, double, double, double, double> crystCoeff();              
+        
         double m_Mu;
         double m_StdDev;
         double m_x0;
         double m_Gamma;
         double m_stanDev;
         double m_Alpha;
+        double m_Average;
         double m_n;
         double m_A;
         double m_B;

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <numeric>
 #include "FiniteFunctions2.h"
 #include <filesystem> //To check extensions in a nice way
 
@@ -55,6 +56,8 @@ FiniteFunction::~FiniteFunction(){
 ###################
 */ 
 
+
+
 std::vector<double> ReadFunc(std::string fName){
 
 ///Opens a file, ready for reading in data
@@ -97,15 +100,25 @@ void FiniteFunction::setRangeMin(double RMin) {m_RMin = RMin;};
 void FiniteFunction::setRangeMax(double RMax) {m_RMax = RMax;};
 void FiniteFunction::setOutfile(std::string Outfile) {this->checkPath(Outfile);};
 
-void Ex34Functions::setMu(double Rmu) {m_Mu = Rmu;};
-void Ex34Functions::setStandardDev(double Rstd) {m_StdDev = Rstd;};
 
-void Ex34Functions::setX0(double Rx0) {m_x0 = Rx0;};
-void Ex34Functions::setGamma(double Rgamma) {m_Gamma = Rgamma;};
+void Ex34Functions::SetGaussParams(double Rmu,double Rstd){
+m_Mu = Rmu;
+m_StdDev = Rstd;
+};
+void Ex34Functions::SetCauchLorParams(double Rx0,double Rgamma){
+m_x0 = Rx0;
+m_Gamma = Rgamma;
+};
 
-void Ex34Functions::SetCrystAlpha(double Ralpha) {m_Alpha = Ralpha;}; 
-void Ex34Functions::SetCrystn(double Rn) {m_n = Rn;}; 
-void Ex34Functions::SetCrystStanDev(double RstDev) {m_stanDev = RstDev;}; 
+void Ex34Functions::SetCrystalParams(double Ralpha,double Rn, double RstDev){
+m_Alpha = Ralpha;
+m_n = Rn;
+m_stanDev = RstDev;
+};
+
+
+void Ex34Functions::SetCrystalAverage(double Ravg){m_Average = Ravg;};
+
 void Ex34Functions::SetCoefs(double Ralpha, double Rn, double RstDev){
 
 m_A = (pow((Rn/Ralpha),Rn))*exp(-((Ralpha*Ralpha)/2));
@@ -113,7 +126,7 @@ m_B = (Rn/Rn)-Ralpha;
 m_C = (Rn/Ralpha)*(1/(Rn-1))*exp(-((Ralpha*Ralpha)/2));
 m_D = sqrt(M_PI_2)*(1+std::erf(Rn/sqrt(2)));
 m_N = 1/(RstDev*(m_C+m_D));
-}
+};
 
 /*
 ###################
@@ -133,6 +146,8 @@ double Ex34Functions::CoLoGamma() {return m_Gamma;};
 double Ex34Functions::crystAlpha() {return m_Alpha;}; 
 double Ex34Functions::crystn() {return m_n;}; 
 double Ex34Functions::crystStanDev() {return m_stanDev;};
+double Ex34Functions::crystalAverage(){return m_Average;};
+
 std::tuple<double, double, double, double, double> Ex34Functions::crystCoeff() {
   return std::tuple<double, double, double, double, double>{m_A, m_B, m_C, m_D, m_N};};
 
@@ -155,7 +170,6 @@ double Ex34Functions::CauchyLorentz(double x) {
 
 //This is probably very inefficent
 double Ex34Functions::CrystalBall(double x) {
-      double average;
       double a;
       double b;
       double A;
@@ -172,15 +186,11 @@ double Ex34Functions::CrystalBall(double x) {
         N = std::get<2>(crstCoeffs);
 
       ///The average of an evenly space distrubtion should be equal to the sum of the start and end / 2
-      b = rangeMax();
-      a = rangeMin();
 
-      average = (b+a) / 2;
-
-    if (((x-average)/crystStanDev()) <= -crystAlpha()){
-        return (A*pow((B-((x-average)/crystStanDev())),-crystn()));
+    if (((x-crystalAverage())/crystStanDev()) <= -crystAlpha()){
+        return (A*pow((B-((x-crystalAverage())/crystStanDev())),-crystn()));
     } else {
-        return (exp(-((x-average)*(x-average))/(2*crystStanDev()*crystStanDev())));
+        return (exp(-((x-crystalAverage())*(x-crystalAverage()))/(2*crystStanDev()*crystStanDev())));
     }
 };
 
