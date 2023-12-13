@@ -5,8 +5,7 @@
 #include <iostream>
 
 ///Put numeric everywhere to try and get rid of an error
-///The negative Crystal ball function only plots right roughly half of the time and I don't know why. If I had more time I'd look into it properly
-///Just run make then ./Test again if it doesn't plot right
+///The negative Crystal ball function plot fine Now
 
 //Update - Something is clearly wrong the negatvie Crystal Ball but I have run out of time to fix it. 
 
@@ -51,7 +50,7 @@ int main(){
     crfunc.selectDist = 2;
     Average = std::reduce(importVals.begin(), importVals.end(), 0.0) / importVals.size();
     crfunc.SetCrystalAverage(Average);
-    crfunc.SetCrystalParams(1,1,1);
+    crfunc.SetCrystalParams(2,0.5,1);
     crfunc.plotFunction();
     crfunc.plotData(importVals,100);
     crfunc.printInfo();

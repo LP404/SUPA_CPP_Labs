@@ -1,12 +1,9 @@
 ///I was talking to another student and they suggested that I combine all the custom functions into one class and add a flag to tell it what to run
 ///Why didn't I think of that? I makes everything so much cleaner (sort of)
 
-//Import relevent lbaries. However from what I understand if I use <iostream> I don't need <iomanip>/<ios>;
-//but if they're not imported the final negatvie Crystal Ball plot breaks and I don't know why. 
+//Import relevent lbaries.
 
 #include <iostream>
-#include <iomanip>
-#include <ios>
 #include <string>
 #include <vector>
 #include <random>
@@ -129,10 +126,13 @@ m_x0 = Rx0;
 m_Gamma = Rgamma;
 };
 
+
 void Ex34Functions::SetCrystalParams(double Ralpha,double Rn, double RstDev){
 m_Alpha = Ralpha;
 m_n = Rn;
 m_stanDev = RstDev;
+//I forgot to actually set the coefficents, which was causing the errors in the code sent on the 11/12/23
+SetCoefs(m_Alpha, m_n, m_stanDev);
 };
 
 
@@ -143,9 +143,8 @@ void Ex34Functions::SetCrystalAverage(double Ravg){m_Average = Ravg;};
 //Calculates the paramaters for the negative Crystal Ball function
 
 void Ex34Functions::SetCoefs(double Ralpha, double Rn, double RstDev){
-
 m_A = (pow((Rn/Ralpha),Rn))*exp(-((Ralpha*Ralpha)/2));
-m_B = (Rn/Rn)-Ralpha;
+m_B = (Rn/Ralpha)-Ralpha;
 m_C = (Rn/Ralpha)*(1/(Rn-1))*exp(-((Ralpha*Ralpha)/2));
 m_D = sqrt(M_PI_2)*(1+std::erf(Rn/sqrt(2)));
 m_N = 1/(RstDev*(m_C+m_D));
